@@ -1,0 +1,33 @@
+/**
+ * \file MyWiegand.h
+ * \author Guillaume R. <guillaume-dev@islog.com>
+ * \brief Handle wiegand communication for Rpleth-relay. 
+ */
+
+#ifndef _MYWIEGAND_h
+#define _MYWIEGAND_h
+
+#include "Arduino.h"
+#include "SdFat.h"
+
+class MyWiegand
+{
+	private:
+
+	public:
+		uint64_t bitHolder;
+		uint8_t bitCount;
+		void init();
+		void reset ();
+		uint8_t available ();
+		uint8_t read ();
+		uint8_t write ();
+};
+
+void Data0 ();
+void Data1 ();
+extern uint32_t wiegandTimeout;
+
+extern MyWiegand wiegand;
+
+#endif
