@@ -1,15 +1,4 @@
-﻿/* Documentation tag for Doxygen
- */
-
-/// \mainpage Rpleth Documentation
-///
-/// \section intro_sec Introduction
-///
-/// This is the Rpleth documentation.
-/// <BR>
-/// It's an open software project in Rpleth reader form ISLOG company.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +9,15 @@ using System.ComponentModel;
 using System.Threading;
 using System.Net.NetworkInformation;
 
+
+/// \mainpage Rpleth Documentation
+///
+/// \section intro_sec Introduction
+///
+/// This is the Rpleth documentation.
+/// <BR>
+/// It's an open software project in Rpleth reader form ISLOG company.
+/// 
 namespace Rpleth
 {
     /// <summary>
@@ -898,7 +896,7 @@ namespace Rpleth
         public long getCSN (long trame)
         {
 			long result = 0;
-			result = (trame >> Offset) & (Math.Pow(2, Length)-1);
+			result = (trame >> Offset) & (long)(Math.Pow(2, Length)-1);
 			return result;
 		}
 

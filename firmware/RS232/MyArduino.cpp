@@ -8,9 +8,6 @@ void MyArduino::init()
 	ard.mac [2] = 0xDA;
 	ard.mac [3] = 0x0D;
 	ard.mac [4] = 0x36;
-	// for arduino ethernet
-	//ard.mac [5] = 0x93;
-	// for arduino mega
 	ard.mac [5] = 0x80;
 	ard.ip [0] = 10;
 	ard.ip [1] = 2;
@@ -39,10 +36,13 @@ uint8_t MyArduino::read ()
 	ifstream file("arduino");
 	if (!file.is_open()) 
 		result = 0;
-	char *p = (char *)&ard;
-	for (size_t i=0; i<sizeof (Arduino); i++)
-		p[i] = file.get();
-	file.close();
+	else
+	{
+		char *p = (char *)&ard;
+		for (size_t i=0; i<sizeof (Arduino); i++)
+			p[i] = file.get();
+		file.close();
+	}
 	return result;
 }
 
