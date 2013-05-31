@@ -44,10 +44,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>D:\Driver\arduino-1.0.4\hardware\arduino\cores\arduino;D:\Driver\arduino-1.0.4\hardware\arduino\variants\standard;D:\Driver\arduino-1.0.4\libraries\SdFat;D:\Driver\arduino-1.0.4\libraries\SdFat\utility;D:\Driver\arduino-1.0.4\libraries\LiquidCrystal;D:\Driver\arduino-1.0.4\libraries\LiquidCrystal\utility;D:\Driver\arduino-1.0.4\libraries\EEPROM;D:\Driver\arduino-1.0.4\libraries\EEPROM\utility;D:\Driver\arduino-1.0.4\libraries\SPI;D:\Driver\arduino-1.0.4\libraries\SPI\utility;D:\Driver\arduino-1.0.4\libraries\Ethernet;D:\Driver\arduino-1.0.4\libraries\Ethernet\utility;d:\driver\arduino-1.0.4\hardware\tools\avr\avr\include\;d:\driver\arduino-1.0.4\hardware\tools\avr\avr\include\avr\;d:\driver\arduino-1.0.4\hardware\tools\avr\avr\;d:\driver\arduino-1.0.4\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>D:\arduino-reader-relay\Firmware\Wiegand\Visual Micro\.Wiegand.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <AdditionalIncludeDirectories>D:\Applications\Arduino\hardware\arduino\cores\arduino;D:\Applications\Arduino\hardware\arduino\variants\standard;D:\Applications\Arduino\libraries\SdFat;D:\Applications\Arduino\libraries\SdFat\utility;D:\Applications\Arduino\libraries\LiquidCrystal;D:\Applications\Arduino\libraries\LiquidCrystal\utility;D:\Applications\Arduino\libraries\EEPROM;D:\Applications\Arduino\libraries\EEPROM\utility;D:\Applications\Arduino\libraries\SPI;D:\Applications\Arduino\libraries\SPI\utility;D:\Applications\Arduino\libraries\Ethernet;D:\Applications\Arduino\libraries\Ethernet\utility;d:\applications\arduino\hardware\tools\avr\avr\include\;d:\applications\arduino\hardware\tools\avr\avr\include\avr\;d:\applications\arduino\hardware\tools\avr\avr\;d:\applications\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>D:\Dev\rpleth-relay\firmware\Wiegand\Visual Micro\.Wiegand.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega328P__;ARDUINO=104;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega328P__;ARDUINO=105;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -73,12 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyArduino.h" />
+    <ClInclude Include="MyConst.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClInclude Include="MyHid.h" />
     <ClInclude Include="MyLcd.h" />
     <ClInclude Include="MyWiegand.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Visual Micro\.arduino-reader-relay.vsarduino.h" />
-    <ClInclude Include="Visual Micro\.firmware.vsarduino.h" />
     <ClInclude Include="Visual Micro\.Wiegand.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>

@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Visual Micro\.arduino-reader-relay.vsarduino.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -33,10 +30,10 @@
     <ClInclude Include="MyWiegand.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Visual Micro\.firmware.vsarduino.h">
+    <ClInclude Include="Visual Micro\.Wiegand.vsarduino.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Visual Micro\.Wiegand.vsarduino.h">
+    <ClInclude Include="MyConst.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

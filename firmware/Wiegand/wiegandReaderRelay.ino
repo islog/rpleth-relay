@@ -4,11 +4,13 @@
  * \brief Firmware Rpleth-relay with wiegand reader. 
  */
 
+#include "MyConst.h"
 #include <SdFat.h>
 #include "MyWiegand.h"
 #include "MyArduino.h"
 #include "MyHid.h"
 #include "MyLcd.h"
+#include "MyConst.h"
 #include <LiquidCrystal.h>
 #include <EEPROM.h>
 #include <SPI.h>
@@ -30,10 +32,7 @@ void setup()
 	uint32_t initialisation = 0;
 	uint64_t tmp = 0;
 	hid.init ();
-	if (wiegand.read() == 0)
-	{
-		wiegand.init();
-	}
+	wiegand.init();
 	if (arduino.read() == 0)
 	{
 		arduino.init();
@@ -47,15 +46,16 @@ void setup()
 	{
 		if (wiegand.available () == 1)
 		{
-			if (tmp == wiegand.toInt () && tmp != 0)
+			if (tmp == wiegand.bitHolder && tmp != 0)
 			{
 				arduino.init ();
-				wiegand.init ();
 				initialisation = millis() - 15001;
+				lcd.clearPrint ("Configuration reset");
+				delay (100);
 			}
 			else
 			{
-				tmp = wiegand.toInt ();
+				tmp = wiegand.bitHolder;
 			}
 			wiegand.reset ();
 		}
@@ -75,52 +75,47 @@ void init_ethernet ()
 	}
 }
 
-byte proc_cmd_arduino (byte * com, byte cmd, byte * data)
+void proc_cmd_rpleth (byte * com, byte cmd, byte * data)
 {
-	byte result = 0;
 	switch (cmd)
 	{
-		case 0x01:
-			if (arduino.ard.dhcp == 0)
-				result = 0x05;
-			else
-				result = 0x06;
+		case STATEDHCP:
 			break;
-		case 0x02:
+		case DHCP:
 			if (arduino.ard.dhcp == 0)
 				arduino.ard.dhcp = 1;
 			else
 				arduino.ard.dhcp = 0;
 			break;
-		case 0x03:
+		case MAC:
 			for (int i = 0; i < 4; i++)
-			{
-				arduino.ard.ip [i] = data [i];
-			}
-			break;
-		case 0x04:
-			for (int i = 0; i < 6; i++)
 			{
 				arduino.ard.mac [i] = data [i];
 			}
-		case 0x05:
+			break;
+		case IP:
+			for (int i = 0; i < 6; i++)
+			{
+				arduino.ard.ip [i] = data [i];
+			}
+		case SUBNET:
 			for (int i = 0; i < 4; i++)
 			{
 				arduino.ard.subnet [i] = data [i];
 			}
 			break;
-		case 0x06:
+		case GATEWAY:
 			for (int i = 0; i < 4; i++)
 			{
 				arduino.ard.gateway [i] = data [i];
 			}
 			break;
-		case 0x07:
+		case PORT:
 			arduino.ard.port = data [0];
 			arduino.ard.port <<= 4;
 			arduino.ard.port = data [1];
 			break;
-		case 0x08:
+		case MESSAGE:
 			for (int i = 0; i < com[2] && i < 16; i++)
 			{
 				arduino.ard.message [i] = data [i];
@@ -128,80 +123,61 @@ byte proc_cmd_arduino (byte * com, byte cmd, byte * data)
 			arduino.ard.message[min (com[2], 31)] = '\0';
 			lcd.clearPrint (arduino.ard.message);
 			break;
-		case 0x09:
-			break;
-		case 0x0A:
+		case RESET:
 			free (data);
 			free (com);
 			reset ();
 			break;
-		default:
-			result = 1;
-			break;
 	}
-	return result;
 }
 
-byte proc_cmd_hid (byte cmd, byte * data, byte size)
+void proc_cmd_hid (byte cmd, byte * data, byte size)
 {
-	byte result = 0;
 	switch (cmd)
 	{
-		case 0x00:	
+		case BEEP:	
 			hid.bip (data[0]);
 			break;
-		case 0x01:
+		case BLINKLED1:
 			hid.blink_led1 (data[0]);
 			break;
-		case 0x02:
+		case BLINKLED2:
 			hid.blink_led2 (data[0]);
 			break;
-		case 0x03:
+		case NOP:
 			break;
-		case 0x04:
-			break;
-		case 0x05:
-			break;
-		default:
-			lcd.clearPrint ("bug");
-			result = 1;
+		case BADGE:
 			break;
 	}
-	return result;
 }
 
-byte proc_cmd_lcd (byte cmd, byte * data, byte size)
+void proc_cmd_lcd (byte cmd, byte * data, byte size)
 {
-	byte result = 0;
 	switch (cmd)
 	{
-		case 0x00: 
-			aff_lcd (data, size, 0x00);
+		case DISPLAYS:
+			aff_lcd (data, size, DISPLAYS);
 			break;
-		case 0x01:
-			aff_lcd (data, size, 0x01);
+		case DISPLAYT:
+			aff_lcd (data, size, DISPLAYS);
 			break;
-		case 0x02: 
+		case BLINK: 
 			if (lcd.is_blink == 0)
 				lcd.is_blink = 1;
 			else
 				lcd.is_blink = 0;
 			lcd.display ();
 			break;
-		case 0x03: 
+		case SCROLL: 
 			if (lcd.is_scroll == 0)
 				lcd.is_scroll = 1;
 			else
 				lcd.is_scroll = 0;
 			break;
-		case 0x04: 
+		case DISPLAYTIME: 
 			display_time = data[0];
 			break;
-		default:
-			result = 1;
-			break;
 	}
-	return result;
 }
 
 void proc_communication ()
@@ -219,46 +195,45 @@ void proc_communication ()
 		statut = check_checksum (cmd, data, checksum);
 		if (statut == 1)
 		{
-			if (cmd[0] > 0x02)
+			if (cmd[0] > LCD)
 			{
-				statut = 0x05;
+				statut = BADDEVICE;
 			}
-			else if ((cmd[0] == 0x00 && cmd[1] > 0x0A) || (cmd[0] == 0x01 && cmd[1] > 0x05) || (cmd[0] == 2 && cmd[1] > 0x04))
+			else if ((cmd[0] == RPLETH && cmd[1] > RESET) || (cmd[0] == HID && cmd[1] > BADGE) || (cmd[0] == LCD && cmd[1] > DISPLAYTIME))
 			{
-				statut = 0x01;
+				statut = ECHEC;
 			}
 			else
 			{
-				statut = 0x00;
+				statut = SUCCES;
 			}
-			if (cmd[0] == 0x00 && cmd[1] == 0x01)
+			if (cmd[0] == RPLETH && cmd[1] == STATEDHCP)
 			{
 				free (data);
 				data = (byte *)malloc (sizeof (byte));
 				data[0] = arduino.ard.dhcp;
-				answer_data (cmd, 0x00, data, 0x01, client);
+				answer_data (cmd, SUCCES, data, 0x01, client);
 			}
 			else
 			{
 				answer (cmd, statut, client);
 			}
-			if (cmd [0] == 0x00)
+			if (cmd [0] == RPLETH)
 			{
-				statut = proc_cmd_arduino (cmd, cmd[1], data);
+				proc_cmd_rpleth (cmd, cmd[1], data);
 			}
-			else if (cmd [0] == 0x01)
+			else if (cmd [0] == HID)
 			{
-				statut = proc_cmd_hid (cmd [1], data, cmd[2]);
+				proc_cmd_hid (cmd [1], data, cmd[2]);
 			}
-			else if (cmd [0] == 0x02)
+			else if (cmd [0] == LCD)
 			{
-				statut = proc_cmd_lcd (cmd [1], data, cmd [2]);
+				proc_cmd_lcd (cmd [1], data, cmd [2]);
 			}
 		}
 		else
 		{
-			statut = 0x02;
-			answer (cmd, statut, client);
+			answer (cmd, BADCHECKSUM, client);
 		}
 		free (cmd);
 		free (data);
@@ -294,7 +269,7 @@ void loop()
 void aff_lcd (byte * data, byte size, byte mode)
 {
 	lcd.clear ();
-	if (mode == 0x00)
+	if (mode == DISPLAYS)
 	{
 		lcd.print (data, size);
 		delay (display_time*1000);
@@ -382,19 +357,19 @@ void answer_data (byte * com, byte statut, byte * data, byte size)
 void answer_badge ()
 {
 	// wait for receive full trame
-	delay (50);
+	delay (100);
 	byte * cmd = (byte *)malloc (2 * sizeof (byte));
 	byte size = wiegand.bitCount/8;
-	if (wiegand.wieg.bitCount%8 != 0)
+	if (wiegand.bitCount%8 != 0)
 		size ++;
 	byte * data = (byte *)malloc (size * sizeof (byte));
-	byte statut = 0x00;
-	for (int i = 0, j = wiegand.wieg.bitCount-8; i < size; i++, j -= 8)
+	byte statut = SUCCES;
+	for (int i = 0, j = wiegand.bitCount-8; i < size; i++, j -= 8)
 	{
 		data[i] = (wiegand.bitHolder >> j) & 0xff;
 	}
-	cmd[0] = 0x01;
-	cmd[1] = 0x05;
+	cmd[0] = HID;
+	cmd[1] = BADGE;
 	answer_data (cmd, statut, data, size);
 	free (data);
 	free (cmd);

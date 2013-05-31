@@ -28,19 +28,6 @@ uint8_t MyWiegand::available ()
 	return bitCount;
 }
 
-uint8_t MyWiegand::read ()
-{
-	uint8_t result = 1;
-	ifstream file("wiegand");
-	if (!file.is_open()) 
-		result = 0;
-	char *p = (char *)&wieg;
-	for (size_t i=0; i<sizeof (Wiegand); i++)
-		p[i] = file.get();
-	file.close();
-	return result;
-}
-
 MyWiegand wiegand;
 
 void Data0()
