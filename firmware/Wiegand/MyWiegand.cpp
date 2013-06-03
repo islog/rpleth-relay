@@ -8,6 +8,7 @@
 
 void MyWiegand::init()
 {
+	Serial.begin(9600);
 	reset ();
 	// for Arduino ethernet
 	attachInterrupt (0, Data0, RISING);

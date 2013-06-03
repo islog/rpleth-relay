@@ -24,34 +24,34 @@ EthernetServer server = EthernetServer(23);
 
 void setup()
 {
-	Serial.begin (9600);
+	hid.init ();
+	wiegand.init();
 	// for old circuit
-	lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
+	//lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
 	// for new circuit
 	//lcd.begin (16, 2, 4, 10, 5, 6, 7, 8, 9);
 	uint32_t initialisation = 0;
 	uint64_t tmp = 0;
-	hid.init ();
-	wiegand.init();
 	if (arduino.read() == 0)
 	{
 		arduino.init();
 	}
 	init_ethernet ();
 	initialisation = millis ();
-	lcd.print ("Initialisation..");
-	lcd.print (Ethernet.localIP());
+	//lcd.print ("Initialisation..");
+	//lcd.print (Ethernet.localIP());
 	wiegand.reset ();
+	hid.bip (1);
 	while (millis() - initialisation <= 15000)
 	{
-		if (wiegand.available () == 1)
+		if (wiegand.available ())
 		{
+			delay (100);
 			if (tmp == wiegand.bitHolder && tmp != 0)
 			{
 				arduino.init ();
 				initialisation = millis() - 15001;
-				lcd.clearPrint ("Configuration reset");
-				delay (100);
+				hid.bip (4);
 			}
 			else
 			{
@@ -60,7 +60,7 @@ void setup()
 			wiegand.reset ();
 		}
 	}
-	lcd.clearPrint (arduino.ard.message);
+	//lcd.clearPrint (arduino.ard.message);
 }
 
 void init_ethernet ()
@@ -364,7 +364,7 @@ void answer_badge ()
 		size ++;
 	byte * data = (byte *)malloc (size * sizeof (byte));
 	byte statut = SUCCES;
-	for (int i = 0, j = wiegand.bitCount-8; i < size; i++, j -= 8)
+	for (int i = size-1, j = 0; i >= 0; i--, j += 8)
 	{
 		data[i] = (wiegand.bitHolder >> j) & 0xff;
 	}
