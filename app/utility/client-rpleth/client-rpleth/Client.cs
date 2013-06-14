@@ -62,7 +62,6 @@ namespace Client_tpc_rpleth
             Console.WriteLine("  5 to change the gateway of Rpleth");
             Console.WriteLine("  6 to change the port of Rpleth");
             Console.WriteLine("  7 to change the welcome message");
-            Console.WriteLine("  8 to change Wiengand configuration");
             Console.WriteLine("  9 to reset Rpleth");
             Console.WriteLine("HID Command");
             Console.WriteLine("  10 to make a bip");
@@ -246,9 +245,6 @@ namespace Client_tpc_rpleth
                         break;
                     case 7:
                         ard.ChangeWelcomeMessage(op.Message);
-                        break;
-                    case 8:
-                        ard.ChangeConfWiegand(Convert.ToByte(op.Offset), Convert.ToByte(op.Lenght), Convert.ToByte(op.TramSize));
                         break;
                     case 9:
                         ard.Reset();

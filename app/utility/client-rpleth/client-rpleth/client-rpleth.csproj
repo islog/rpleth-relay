@@ -51,7 +51,7 @@
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="Rpleth">
-      <HintPath>..\..\..\..\Lib\Rpleth\bin\Release\Rpleth.dll</HintPath>
+      <HintPath>..\..\..\..\lib\csharp\Rpleth\bin\Release\Rpleth.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
