@@ -2,7 +2,6 @@
 
 void MyArduino::init()
 {
-	sd.begin (4);
 	ard.mac [0] = 0x90;
 	ard.mac [1] = 0xA2;
 	ard.mac [2] = 0xDA;
@@ -32,16 +31,18 @@ void MyArduino::init()
 
 uint8_t MyArduino::read ()
 {
-	uint8_t result = 1;
-	ifstream file("arduino");
-	if (!file.is_open()) 
-		result = 0;
-	else
+	uint8_t result = 0;
+	if (sd.begin (4))
 	{
-		char *p = (char *)&ard;
-		for (size_t i=0; i<sizeof (Arduino); i++)
-			p[i] = file.get();
-		file.close();
+		ifstream file("arduino.cfg");
+		if (file.is_open()) 
+		{
+			char *p = (char *)&ard;
+			for (size_t i=0; i<sizeof (Arduino); i++)
+				p[i] = file.get();
+			file.close();
+			result = 1;
+		}
 	}
 	return result;
 }

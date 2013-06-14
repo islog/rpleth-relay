@@ -17,7 +17,6 @@ void MyRs::begin ()
 	free (ans);
 }
 
-
 void MyRs::send (byte * cmd, byte size)
 {
 	char * trame = (char *) malloc ((size + 1) * sizeof (char));
@@ -33,7 +32,7 @@ void MyRs::send (byte * cmd, byte size)
 byte * MyRs::receive (byte * size)
 {
 	// juste for wait the complete trame
-	delay (100);
+	delay (200);
 	int nb = com->available();
 	byte * result = (byte *)malloc (nb * sizeof (byte));
 	for (int i = 0; i < nb; i++)

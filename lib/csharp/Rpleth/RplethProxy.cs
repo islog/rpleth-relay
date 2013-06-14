@@ -295,44 +295,6 @@ namespace Rpleth
         }
 
         /// <summary>
-        /// Change the Wiegand configuration
-        /// </summary>
-        /// <param name="offset">the new offset</param>
-        /// <param name="lenght">the new lenght</param>
-        /// <param name="tramSize">the new tramSize</param>
-        public void ChangeConfWiegand(byte offset, byte lenght, byte tramSize)
-        {
-            transmission = new byte[7];
-            transmission[0] = (byte)RplethConst.Device.RPLETH;
-            transmission[1] = (byte)RplethConst.RplethCommand.WIEGAND;
-            transmission[2] = 0x03;
-            transmission[3] = offset;
-            transmission[4] = lenght;
-            transmission[5] = tramSize;
-            transmission[6] = Compute_checksum();
-            Send();
-            Answer();
-        }
-
-        /// <summary>
-        /// Change the Wiegand configuration
-        /// </summary>
-        /// <param name="offset">the new offset</param>
-        /// <param name="lenght">the new lenght</param>
-        public void ChangeConfWiegand(byte offset, byte lenght)
-        {
-            ChangeConfWiegand(offset, lenght, 26);
-        }
-
-        /// <summary>
-        /// Reset the Wiegand configuration
-        /// </summary>
-        public void ResetConfWiegand()
-        {
-            ChangeConfWiegand(1, 16, 26);
-        }
-
-        /// <summary>
         /// Reset the reader
         /// </summary>
         public void Reset()
@@ -467,10 +429,10 @@ namespace Rpleth
         /// <summary>
         /// Get the number of the badge wait until Continues is false
         /// </summary>
-        /// <returns>The badge or -1 if none</returns>
-        public long Badge()
+        /// <returns>The badge</returns>
+        public ulong Badge()
         {
-            long result = -1;
+            ulong result = 0;
             transmission = new byte[4];
             transmission[0] = (byte)RplethConst.Device.HID;
             transmission[1] = (byte)RplethConst.HidCommand.BADGE;
@@ -486,10 +448,10 @@ namespace Rpleth
         /// Get the number of a badge
         /// </summary>
         /// <param name="timeout">The time to wait</param>
-        /// <returns>The badge or -1 if none</returns>
-        public long Badge(int timeout)
+        /// <returns>The badge</returns>
+        public ulong Badge(int timeout)
         {
-            long result = -1;
+            ulong result = 0;
             transmission = new byte[4];
             transmission[0] = (byte)RplethConst.Device.HID;
             transmission[1] = (byte)RplethConst.HidCommand.BADGE;
@@ -794,13 +756,13 @@ namespace Rpleth
         /// <summary>
         /// Get the number of a badge while Continues == false
         /// </summary>
-        /// <returns>the number of a badge or -1 if none</returns>
-        private long GetBadge()
+        /// <returns>the number of a badge</returns>
+        private ulong GetBadge()
         {
             byte checksum = 0;
             byte checksum_dst = 0;
             int answer = 0;
-            long result = -1;
+            ulong result = 0;
             byte[] com = new byte[4];
             while (!stm.DataAvailable && Continues) { }
             if (Continues)
@@ -830,7 +792,7 @@ namespace Rpleth
                     {
                         throw new RplethException("Bad Checksum in answer");
                     }
-                    result = getCSN (result);
+                    result = GetCSN (result);
                 }
             }
             return result;
@@ -841,12 +803,12 @@ namespace Rpleth
         /// </summary>
         /// <param name="p_timeout">the time to wait a badge</param>
         /// <returns>the number of a badge</returns>
-        private long GetBadge(int p_timeout)
+        private ulong GetBadge(int p_timeout)
         {
             byte checksum = 0;
             byte checksum_dst = 0;
             int answer = 0;
-            long result = -1;
+            ulong result = 0;
             byte[] com = new byte[4];
             DateTime dtStart = DateTime.Now;
             TimeSpan timeout = DateTime.Now.Subtract(dtStart);
@@ -878,7 +840,7 @@ namespace Rpleth
                     {
                         throw new RplethException("Bad Checksum in answer");
                     }
-                    result = getCSN (result);
+                    result = GetCSN (result);
                 }
             }
             else if (Continues)
@@ -893,10 +855,10 @@ namespace Rpleth
         /// </summary>
         /// <param name="trame">the full wiegand trame</param>
         /// <returns>the csn of a badge</returns>
-        public long getCSN (long trame)
+        public ulong GetCSN (ulong trame)
         {
-			long result = 0;
-			result = (trame >> Offset) & (long)(Math.Pow(2, Length)-1);
+			ulong result = 0;
+			result = (trame >> Offset) & (ulong)(Math.Pow(2, Length)-1);
 			return result;
 		}
 

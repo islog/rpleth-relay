@@ -68,13 +68,9 @@ namespace Rpleth
             /// </summary>
             MESSAGE = 0x08,
             /// <summary>
-            /// Change the Wiegand configuration
-            /// </summary>
-            WIEGAND = 0x09,
-            /// <summary>
             /// Reset Arduino
             /// </summary>
-            RESET = 0x0A
+            RESET = 0x09
         }
 
         /// <summary>
