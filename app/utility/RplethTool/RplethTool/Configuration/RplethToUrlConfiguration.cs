@@ -81,7 +81,7 @@ namespace RplethTool.Configuration
         public override bool GetConfiguration(Options options, Interface inter)
         {
             bool res = true;
-            inter.WriteMessage("\n*** Server configuration ***");
+            inter.WriteMessage("\n*** Server configuration ***\n");
             if (options.Ip == null)
                 struc.Ip = inter.GetByteTab("Enter the ip address of the server", 4, '.');
             else

@@ -84,7 +84,7 @@ namespace RplethTool.Configuration
             bool res = true;
             try
             {
-                inter.WriteMessage("\n*** Ethernet configuration ***");
+                inter.WriteMessage("\n*** Ethernet configuration ***\n");
                 if (options.Mac == null)
                     struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
                 else
@@ -161,7 +161,7 @@ namespace RplethTool.Configuration
                     struc.Port = Convert.ToUInt16(inter.GetUint("Enter the port number that listen Rpleth"));
                 else
                     struc.Port = Convert.ToUInt16(options.Port);
-                inter.WriteMessage("\n*** Rpleth configuration ***");
+                inter.WriteMessage("\n*** Rpleth configuration ***\n");
                 if (options.Welcome == null)
                     struc.Message = inter.GetMessage("Enter the welcome message of Rpleth");
                 else

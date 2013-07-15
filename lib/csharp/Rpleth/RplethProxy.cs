@@ -60,12 +60,12 @@ namespace Rpleth
         public bool Continues { get; set; }
         
         /// <summary>
-        /// Represents the offset needed to do in wiegand trame to get the CSN
+        /// Represents the offset needed to do in wiegand frame to get the CSN
         /// </summary>
         public byte Offset { get; set; }
         
         /// <summary>
-        /// Represents the lenght of CSN in wiegand trame
+        /// Represents the lenght of CSN in wiegand frame
         /// </summary>
         public byte Length { get; set; }
 

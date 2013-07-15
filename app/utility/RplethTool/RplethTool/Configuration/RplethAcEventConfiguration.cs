@@ -86,7 +86,7 @@ namespace RplethTool.Configuration
             bool res = true;
             try
             {
-                inter.WriteMessage("*** Wiegand configuration ***");
+                inter.WriteMessage("\n*** Wiegand configuration ***\n");
                 if (options.Begin == -1)
                     struc.Begin = Convert.ToUInt16(inter.GetUint("Enter the number of begin card"));
                 else
@@ -96,10 +96,10 @@ namespace RplethTool.Configuration
                 else
                     struc.Cancel = Convert.ToUInt16(options.Begin);
                 if (options.TramSize == -1)
-                    struc.TrameSize = inter.GetByte("Entre the size of wiegand frame read by Rpleth");
+                    struc.TrameSize = inter.GetByte("Enter the size of wiegand frame read by Rpleth");
                 else
                     struc.TrameSize = Convert.ToByte(options.TramSize);
-                inter.WriteMessage("*** Ethernet configuration ***");
+                inter.WriteMessage("\n*** Ethernet configuration ***\n");
                 if (options.Mac == null)
                     struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
                 else
@@ -113,7 +113,7 @@ namespace RplethTool.Configuration
                         struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
                     }
                 }
-                inter.WriteMessage("*** Ftp server configuration ***");
+                inter.WriteMessage("\n*** Ftp server configuration ***\n");
                 if (options.Ip == null)
                     struc.Ip = inter.GetByteTab("Enter the ip address of ftp server", 4, '.');
                 else

@@ -52,7 +52,7 @@ namespace RplethTool
         {
             int result = 0;
             string tmp;
-            Console.WriteLine("Enter the number corresponding to your rpleth.\n");
+            Console.WriteLine("Enter the number corresponding to your Rpleth.\n");
             for (int i = 0; i < confList.ConfigurationsList.Count; i++)
             {
                 tmp = "\t";
