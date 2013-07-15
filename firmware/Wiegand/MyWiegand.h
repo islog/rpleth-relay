@@ -8,7 +8,6 @@
 #define _MYWIEGAND_h
 
 #include "Arduino.h"
-#include "SdFat.h"
 
 class MyWiegand
 {
@@ -20,8 +19,6 @@ class MyWiegand
 		void init();
 		void reset ();
 		uint8_t available ();
-		uint8_t read ();
-		uint8_t write ();
 };
 
 void Data0 ();

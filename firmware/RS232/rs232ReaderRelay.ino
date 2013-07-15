@@ -31,8 +31,6 @@ void setup()
 	Serial.println ("Ethernet");
 	Serial.println (init_ethernet ());
 	Serial.println ("pret");
-	server->println ("ready");
-	Serial.println ("pret");
 	//lcd.clearPrint (arduino.ard.message);
 }
 
