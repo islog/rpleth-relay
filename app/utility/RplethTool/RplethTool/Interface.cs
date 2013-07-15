@@ -100,6 +100,7 @@ namespace RplethTool
                     Console.WriteLine(message);
                 else
                     Console.WriteLine("Enter a number");
+                Console.Write("\t");
                 tmp = Console.ReadLine();
                 res = Convert.ToInt32(tmp, numberBase);
             }
@@ -136,6 +137,7 @@ namespace RplethTool
                     Console.WriteLine(message);
                 else
                     Console.WriteLine("Enter a number");
+                Console.Write("\t");
                 tmp = Console.ReadLine();
                 res = Convert.ToUInt32(tmp, numberBase);
             }
@@ -172,6 +174,7 @@ namespace RplethTool
                     Console.WriteLine(message);
                 else
                     Console.WriteLine("Enter a number");
+                Console.Write("\t");
                 tmp = Console.ReadLine();
                 res = Convert.ToInt64(tmp, numberBase);
             }
@@ -221,23 +224,14 @@ namespace RplethTool
                             format += separator;
                     }
                     format += ")";
-                    string[] tmpSplited = null;
                     if (message != string.Empty)
                         Console.WriteLine(message);
                     else
                         Console.WriteLine("Enter an address");
                     Console.WriteLine(format);
+                    Console.Write("\t");
                     tmp = Console.ReadLine();
-                    tmpSplited = tmp.Split(separator);
-
-                    if (tmpSplited.Length != size)
-                    {
-                        throw new Exception("Error : Bad lenth in splited string");
-                    }
-                    for (int i = 0; i < size; i++)
-                    {
-                        result[i] = Convert.ToByte(tmpSplited[i], numberBase);
-                    }
+                    result = StringHelper.StringToByteTab(tmp, size, separator, numberBase);
                 }
                 catch (Exception e)
                 {
@@ -248,7 +242,7 @@ namespace RplethTool
         }
 
         /// <summary>
-        /// Display the message and ask tab to the user. Use base 10.
+        /// Display the message and ask a tab to the user. Use base 10.
         /// </summary>
         /// <param name="message">The message to display</param>
         /// <param name="size">The size of the tab</param>
@@ -257,6 +251,87 @@ namespace RplethTool
         public byte[] GetByteTab(string message, int size, char separator)
         {
             return GetByteTab(message, size, separator, 10);
+        }
+
+        /// <summary>
+        /// Display the message and ask string to the user.
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        /// <returns>The string ask to the user</returns>
+        public string GetMessage(string message)
+        {
+            string res;
+            try
+            {
+                if (message != string.Empty)
+                    Console.WriteLine(message);
+                else
+                    Console.WriteLine("Enter a message");
+                Console.Write("\t");
+                res = Console.ReadLine();
+                if (res == string.Empty)
+                    throw new Exception("Error : Bad string receive");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Display the message and ask a byte to the user.
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        /// <param name="numberBase">The base of the number writing by the user</param>
+        /// <returns>The byte ask to the user</returns>
+        public byte GetByte(string message, int numberBase)
+        {
+            byte res = 0;
+            try
+            {
+                string tmp;
+                if (message != string.Empty)
+                    Console.WriteLine(message);
+                else
+                    Console.WriteLine("Enter a number");
+                Console.Write("\t");
+                tmp = Console.ReadLine();
+                res = Convert.ToByte(tmp, numberBase);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Display the message and ask a byte to the user. Use base 10.
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        /// <returns>The byte ask to the user</returns>
+        public byte GetByte(string message)
+        {
+            return GetByte(message, 10);
+        }
+
+        /// <summary>
+        /// Display the message
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        public void WriteMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        /// <summary>
+        /// Display an error
+        /// </summary>
+        /// <param name="error">The error to display</param>
+        public void WriteError(string error)
+        {
+            Console.Error.WriteLine(error);
         }
     }
 }

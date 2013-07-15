@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -39,10 +40,40 @@ namespace RplethTool.Configuration
         /// Write the configuration on a file
         /// </summary>
         /// <returns>True if it succesfull or false otherwise</returns>
-        public override bool Write()
+        public override bool Write(Interface inter)
         {
             bool res = false;
-
+            System.IO.Directory.CreateDirectory("./"+Name);
+            string filename = "./"+Name+"/acevent.cfg";
+            IntPtr ptr_c = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(RplethAcEventStructure)));
+            FileStream file = null;
+            try
+            {
+                file = new FileStream(filename, FileMode.Create);
+                Marshal.StructureToPtr(struc, ptr_c, false);
+                for (int i = 0; i < Marshal.SizeOf(typeof(RplethAcEventStructure)); i++)
+                {
+                    file.WriteByte(Marshal.ReadByte(ptr_c, i));
+                }
+                inter.WriteMessage("\n\t\t\t***********************");
+                inter.WriteMessage("\tThe configuration file has been successfully writing.");
+                inter.WriteMessage("\t\t\t***********************\n");
+                res = true;
+            }
+            catch (Exception ex)
+            {
+                inter.WriteError(ex.Message);
+                inter.WriteMessage("\n\t\t\t***********************");
+                inter.WriteMessage("\tThe configuration file hasn't been successfully writing.");
+                inter.WriteMessage("\t\t\t***********************\n");
+            }
+            finally
+            {
+                if (file != null)
+                    file.Flush();
+                file.Close();
+                Marshal.FreeHGlobal(ptr_c);
+            }
             return res;
         }
 
@@ -52,11 +83,64 @@ namespace RplethTool.Configuration
         /// <returns>True if it successfull or false otherwise</returns>
         public override bool GetConfiguration(Options options, Interface inter)
         {
-            bool res = false;
-            if (options.Begin == -1) 
-                struc.Begin = Convert.ToUInt16(options.Begin);
-            else
-                struc.Begin = Convert.ToUInt16(inter.GetUint("Enter the begin number"));
+            bool res = true;
+            try
+            {
+                inter.WriteMessage("*** Wiegand configuration ***");
+                if (options.Begin == -1)
+                    struc.Begin = Convert.ToUInt16(inter.GetUint("Enter the number of begin card"));
+                else
+                    struc.Begin = Convert.ToUInt16(options.Begin);
+                if (options.Cancel == -1)
+                    struc.Cancel = Convert.ToUInt16(inter.GetUint("Enter the number of cancel card"));
+                else
+                    struc.Cancel = Convert.ToUInt16(options.Begin);
+                if (options.TramSize == -1)
+                    struc.TrameSize = inter.GetByte("Entre the size of wiegand frame read by Rpleth");
+                else
+                    struc.TrameSize = Convert.ToByte(options.TramSize);
+                inter.WriteMessage("*** Ethernet configuration ***");
+                if (options.Mac == null)
+                    struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
+                else
+                {
+                    try
+                    {
+                        struc.Mac = StringHelper.StringToByteTab(options.Mac, 6, ':', 16);
+                    }
+                    catch (Exception)
+                    {
+                        struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
+                    }
+                }
+                inter.WriteMessage("*** Ftp server configuration ***");
+                if (options.Ip == null)
+                    struc.Ip = inter.GetByteTab("Enter the ip address of ftp server", 4, '.');
+                else
+                {
+                    try
+                    {
+                        struc.Ip = StringHelper.StringToByteTab(options.Ip, 4, '.');
+                    }
+                    catch (Exception)
+                    {
+                        struc.Ip = inter.GetByteTab("Enter the ip address of ftp server", 4, '.');
+                    }
+                }
+                if (options.User == null)
+                    struc.User = inter.GetMessage("Enter the user of ftp server");
+                else
+                    struc.User = options.User;
+                if (options.Pass == null)
+                    struc.Pass = inter.GetMessage("Enter the password of ftp server");
+                else
+                    struc.Pass = options.Pass;
+            }
+            catch (Exception)
+            {
+                res = false;
+            }
+
             return res;
         }
 
@@ -68,25 +152,31 @@ namespace RplethTool.Configuration
         {
             [FieldOffset(0)]
             [MarshalAs(UnmanagedType.I2)]
-            private ushort beginNumber;
+            ushort beginNumber;
+
             [FieldOffset(2)]
             [MarshalAs(UnmanagedType.I2)]
-            private ushort cancelNumber;
+            ushort cancelNumber;
+
             [FieldOffset(4)]
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-            private string user;
+            string user;
+
             [FieldOffset(16)]
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
-            private string pass;
+            string pass;
+
             [FieldOffset(28)]
             [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U1, SizeConst = 4)]
-            private byte[] ip;
+            byte[] ip;
+
             [FieldOffset(32)]
             [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U1, SizeConst = 6)]
-            private byte[] mac;
+            byte[] mac;
+
             [FieldOffset(38)]
             [MarshalAs(UnmanagedType.U1)]
-            private byte tram_size;
+            byte tram_size;
 
             public ushort Begin
             {
@@ -112,19 +202,19 @@ namespace RplethTool.Configuration
                 set { pass = value; }
             }
 
-            private byte[] Ip
+            public byte[] Ip
             {
                 get { return ip; }
                 set { ip = value; }
             }
 
-            private byte[] Mac
+            public byte[] Mac
             {
                 get { return mac; }
                 set { mac = value; }
             }
 
-            private byte Tram_size
+            public byte TrameSize
             {
                 get { return tram_size; }
                 set { tram_size = value; }

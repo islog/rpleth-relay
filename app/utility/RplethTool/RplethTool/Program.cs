@@ -21,19 +21,20 @@ namespace RplethTool
                     options.Menu = inter.GetMenu();
                 if (options.Menu != inter.confList.ConfigurationsList.Count)
                 {
-                    Console.WriteLine(inter.confList.ConfigurationsList[options.Menu]);
-                    inter.confList.ConfigurationsList[options.Menu].GetConfiguration(options, inter);
-                    inter.confList.ConfigurationsList[options.Menu].Write();
+                    while (!inter.confList.ConfigurationsList[options.Menu].GetConfiguration(options, inter))
+                    {
+                        inter.WriteMessage("You made a mistake start again.");
+                    }
+                    inter.confList.ConfigurationsList[options.Menu].Write(inter);
                 }
                 inter.GoodBy();
                 Thread.Sleep(5000);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                inter.WriteError(e.Message);
                 inter.GoodBy();
                 Thread.Sleep(5000);
-                Environment.Exit(0);
             }
         }
     }

@@ -38,7 +38,7 @@ namespace RplethTool.Configuration
         /// Write the configuration on a file
         /// </summary>
         /// <returns>True if it succesfull or false otherwise</returns>
-        public abstract bool Write();
+        public abstract bool Write(Interface inter);
 
         /// <summary>
         /// Get the configuration from interface
