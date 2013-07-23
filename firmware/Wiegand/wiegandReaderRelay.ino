@@ -20,14 +20,15 @@
 byte display_time = 3;
 uint32_t blink = 0;
 uint32_t scroll = 0;
-EthernetServer server = EthernetServer(23);
+EthernetServer * server;
 
 void setup()
 {
+
 	hid.init ();
 	wiegand.init();
 	// for old circuit
-	//lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
+	lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
 	// for new circuit
 	//lcd.begin (16, 2, 4, 10, 5, 6, 7, 8, 9);
 	uint32_t initialisation = 0;
@@ -36,10 +37,11 @@ void setup()
 	{
 		arduino.init();
 	}
+	server = new EthernetServer(arduino.ard.port);
 	init_ethernet ();
 	initialisation = millis ();
-	//lcd.print ("Initialisation..");
-	//lcd.print (Ethernet.localIP());
+	lcd.print ("Initialisation..");
+	lcd.print (Ethernet.localIP());
 	wiegand.reset ();
 	hid.bip (1);
 	while (millis() - initialisation <= 15000)
@@ -60,7 +62,7 @@ void setup()
 			wiegand.reset ();
 		}
 	}
-	//lcd.clearPrint (arduino.ard.message);
+	lcd.clearPrint (arduino.ard.message);
 }
 
 void init_ethernet ()
@@ -182,7 +184,7 @@ void proc_cmd_lcd (byte cmd, byte * data, byte size)
 
 void proc_communication ()
 {
-	EthernetClient client = server.available();
+	EthernetClient client = server->available();
 	if (client)
 	{
 		byte * cmd = NULL;
@@ -337,21 +339,21 @@ void answer_data (byte * com, byte statut, byte * data, byte size, EthernetClien
 void answer_data (byte * com, byte statut, byte * data, byte size)
 {
 	byte checksum = 0;
-	server.write (statut);
+	server->write (statut);
 	checksum ^= statut;
 	for (int i = 0; i < 2; i++)
 	{
-		server.write (com[i]);
+		server->write (com[i]);
 		checksum ^= com[i];
 	}
-	server.write (size);
+	server->write (size);
 	checksum ^= size;
 	for (int i = 0; i < size; i++)
 	{
-		server.write (data[i]);
+		server->write (data[i]);
 		checksum ^= data[i];
 	}
-	server.write (checksum);
+	server->write (checksum);
 }
 
 void answer_badge ()
@@ -381,7 +383,7 @@ byte * receive_cmd (EthernetClient client)
 	for (int i = 0; i < 3; i++)
 	{
 		com [i] = client.read ();
-		client = server.available();
+		client = server->available();
 	}
 	return com;
 }
@@ -401,7 +403,7 @@ byte * receive_cmd_data (EthernetClient client, byte size)
 		{
 			i --;
 		}
-		client = server.available ();
+		client = server->available ();
 	}
 	return cmd;
 }

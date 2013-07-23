@@ -2,7 +2,6 @@
 #define _MYCONF_H
 
 #include "Arduino.h"
-//#include "SD.h"
 #include "SdFat.h"
 
 typedef struct str_arduino

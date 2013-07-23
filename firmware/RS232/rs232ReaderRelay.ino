@@ -174,7 +174,11 @@ void proc_communication ()
 				byte size;
 				data = rs.receive(&size);
 				if (size)
+				{
+					size -= 2;
+					Serial.println((int)size);
 					answer_data (cmd, SUCCES, data, size, client);
+				}
 				else
 					answer_data (cmd, ECHEC, NULL, 0, client);
 			}
