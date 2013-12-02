@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "SdFat.h"
+#include "MyClient.h"
 
 typedef struct str_arduino
 {
@@ -16,6 +17,7 @@ typedef struct str_arduino
 	byte dhcp;
 }Arduino;
 
+
 class MyArduino
 {
  private:
@@ -25,6 +27,7 @@ class MyArduino
 	uint8_t read ();
 	Arduino ard;
 	SdFat sd;
+        MyClientManager client;
 };
 
 extern MyArduino arduino;

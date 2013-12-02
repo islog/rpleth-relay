@@ -25,7 +25,7 @@ EthernetServer * server;
 void setup()
 {
 
-	hid.init ();
+	hid.init();
 	wiegand.init();
 	// for old circuit
 	//lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
@@ -188,37 +188,36 @@ void proc_cmd_lcd (byte cmd, byte * data, byte size)
 
 void proc_communication ()
 {
-	EthernetClient client = server->available();
-	if (client)
+  EthernetClient client = server->available();
+  if (client)
+  {
+      arduino.client.read(client);
+  }
+
+	if (arduino.client.haveCmd())
 	{
-		byte * cmd = NULL;
-		byte * data = NULL;
-		byte checksum;
-		byte statut;
-		cmd = receive_cmd (client);
-                Serial.println ("Cmd received. "); 
-		data = receive_cmd_data (client, cmd[2]);
-                Serial.println("Data received.");
-		checksum = client.read ();
-                Serial.println("Checksum received.");
-		statut = check_checksum (cmd, data, checksum);
-		if (statut == 1)
+                //Serial.println ("CMD IS HERE");
+                byte* cmd = arduino.client.header;
+                byte *data = arduino.client.buffer;
+		if (arduino.client.check_checksum())
 		{
+                        Serial.println ("CHECKSUM PASSED");
+  
+                        byte statut = 0;
 			if (cmd[0] > LCD)
 			{
 				statut = BADDEVICE;
 			}
-			/*else if ((cmd[0] == RPLETH && cmd[1] > RESET) || (cmd[0] == HID && cmd[1] > BADGE) || (cmd[0] == LCD && cmd[1] > DISPLAYTIME))
-			{
-				statut = ECHEC;
-			}*/
+			//else if ((cmd[0] == RPLETH && cmd[1] > RESET) || (cmd[0] == HID && cmd[1] > BADGE) || (cmd[0] == LCD && cmd[1] > DISPLAYTIME))
+			//{
+			//	statut = ECHEC;
+			//}
 			else
 			{
 				statut = SUCCES;
 			}
 			if (cmd[0] == RPLETH && cmd[1] == STATEDHCP)
-			{
-				free (data);
+			{                          
 				data = (byte *)malloc (sizeof (byte));
 				data[0] = arduino.ard.dhcp;
 				answer_data (cmd, SUCCES, data, 0x01, client);
@@ -230,7 +229,7 @@ void proc_communication ()
 			if (cmd [0] == RPLETH)
 			{
 				proc_cmd_rpleth (cmd, cmd[1], data);
-			}
+		        }
 			else if (cmd [0] == HID)
 			{
 				proc_cmd_hid (cmd [1], data, cmd[2]);
@@ -244,8 +243,7 @@ void proc_communication ()
 		{
 			answer (cmd, BADCHECKSUM, client);
 		}
-		free (cmd);
-		free (data);
+		arduino.client.reset();
 	}
 }
 
@@ -296,23 +294,6 @@ void aff_lcd (byte * data, byte size, byte mode)
 	}
 }
 
-byte check_checksum (byte * cmd, byte * data, byte checksum)
-{
-	byte result = 0, tmp = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		tmp ^= cmd [i];
-	}
-	for (int i = 0; i < cmd[2]; i++)
-	{
-		tmp ^= data [i];
-	}
-	if (tmp == checksum)
-	{
-		result = 1;
-	}
-	return result;
-}
 
 void answer (byte * com, byte statut, EthernetClient client)
 {
