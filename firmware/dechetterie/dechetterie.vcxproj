@@ -11,9 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A3D3F7F9-72A8-4B39-84A4-6816B1CD2ECF}</ProjectGuid>
-    <RootNamespace>arduinoReaderRelay</RootNamespace>
-    <ProjectName>wiegandReaderRelay</ProjectName>
+    <ProjectGuid>{E449A710-980D-44B2-8279-8EBE423F10CF}</ProjectGuid>
+    <RootNamespace>dechetterie</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -44,8 +43,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Arduino\hardware\arduino\cores\arduino;C:\Arduino\hardware\arduino\variants\standard;C:\Arduino\libraries\SdFat;C:\Arduino\libraries\SdFat\utility;C:\Arduino\libraries\LiquidCrystal;C:\Arduino\libraries\LiquidCrystal\utility;C:\Arduino\libraries\EEPROM;C:\Arduino\libraries\EEPROM\utility;C:\Arduino\libraries\SPI;C:\Arduino\libraries\SPI\utility;C:\Arduino\libraries\Ethernet;C:\Arduino\libraries\Ethernet\utility;c:\arduino\hardware\tools\avr\avr\include\;c:\arduino\hardware\tools\avr\avr\include\avr\;c:\arduino\hardware\tools\avr\avr\;c:\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>C:\dev\ISLOG\dev-git\app\rpleth-relay\firmware\Wiegand\Visual Micro\.Wiegand.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Arduino\hardware\arduino\cores\arduino;C:\Arduino\hardware\arduino\variants\standard;c:\arduino\hardware\tools\avr\avr\include\;c:\arduino\hardware\tools\avr\avr\include\avr\;c:\arduino\hardware\tools\avr\avr\;c:\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\dev\ISLOG\dev-git\app\rpleth-relay\firmware\dechetterie\Visual Micro\.dechetterie.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__AVR_ATmega328P__;ARDUINO=105;ARDUINO_MAIN;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -56,9 +56,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Arduino\hardware\arduino\cores\arduino;C:\Arduino\hardware\arduino\variants\standard;C:\Arduino\libraries\Ethernet;C:\Arduino\libraries\Ethernet\utility;C:\Arduino\libraries\SPI;C:\Arduino\libraries\SPI\utility;C:\Arduino\libraries\SdFat;C:\Arduino\libraries\SdFat\utility;c:\arduino\hardware\tools\avr\avr\include\;c:\arduino\hardware\tools\avr\avr\include\avr\;c:\arduino\hardware\tools\avr\avr\;c:\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>C:\dev\ISLOG\dev-git\app\rpleth-relay\firmware\dechetterie\Visual Micro\.dechetterie.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__AVR_ATmega328P__;_VMDEBUG=1;ARDUINO=105;ARDUINO_MAIN;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,36 +73,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="MyArduino.h" />
-    <ClInclude Include="MyConst.h">
+    <None Include="dechetterie.ino">
       <FileType>CppCode</FileType>
-    </ClInclude>
-    <ClInclude Include="MyHid.h" />
-    <ClInclude Include="MyLcd.h" />
-    <ClInclude Include="MyWiegand.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Visual Micro\.Wiegand.vsarduino.h" />
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="wiegandReaderRelay.rc" />
+    <ClInclude Include="MyArduino.h" />
+    <ClInclude Include="MyUrl.h" />
+    <ClInclude Include="MyWiegand.h" />
+    <ClInclude Include="Visual Micro\.dechetterie.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyArduino.cpp" />
-    <ClCompile Include="MyHid.cpp" />
-    <ClCompile Include="MyLcd.cpp" />
+    <ClCompile Include="MyUrl.cpp" />
     <ClCompile Include="MyWiegand.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Wiegand.ino">
-      <FileType>CppCode</FileType>
-    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM3" arduino.board.name="ethernet" arduino.board.desc="Arduino Ethernet" arduino.board.property_bag="name=Arduino Ethernet&#xD;&#xA;upload.protocol=arduino&#xD;&#xA;upload.maximum_size=32256&#xD;&#xA;upload.speed=115200&#xD;&#xA;bootloader.low_fuses=0xff&#xD;&#xA;bootloader.high_fuses=0xde&#xD;&#xA;bootloader.extended_fuses=0x05&#xD;&#xA;bootloader.path=optiboot&#xD;&#xA;bootloader.file=optiboot_atmega328.hex&#xD;&#xA;bootloader.unlock_bits=0x3F&#xD;&#xA;bootloader.lock_bits=0x0F&#xD;&#xA;build.variant=standard&#xD;&#xA;build.mcu=atmega328p&#xD;&#xA;build.f_cpu=16000000L&#xD;&#xA;build.core=arduino&#xD;&#xA;runtime.ide.path=D:\Driver\arduino-1.0.4&#xD;&#xA;build.system.path=D:\Driver\arduino-1.0.4\hardware\arduino\system&#xD;&#xA;software=ARDUINO&#xD;&#xA;runtime.ide.version=104&#xD;&#xA;vm.core.include=arduino.h&#xD;&#xA;vm.boardsource.path=D:\Driver\arduino-1.0.4\hardware\arduino&#xD;&#xA;vm.boardsource.name=boards.txt&#xD;&#xA;vm.platformname.name=&#xD;&#xA;" arduino.build.mcu="atmega328p" arduino.build.f_cpu="16000000L" arduino.build.core="arduino" arduino.upload.protocol="arduino" arduino.upload.speed="115200" arduino.upload.maximum_size="32256" />
+      <UserProperties arduino.upload.port="COM5" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

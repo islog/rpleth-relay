@@ -28,7 +28,7 @@ void setup()
 	hid.init ();
 	wiegand.init();
 	// for old circuit
-	lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
+	//lcd.begin (16, 2, 4, 5, 6, 7, 8, 9);
 	// for new circuit
 	//lcd.begin (16, 2, 4, 10, 5, 6, 7, 8, 9);
 	uint32_t initialisation = 0;
@@ -37,12 +37,14 @@ void setup()
 	{
 		arduino.init();
 	}
+        Serial.println ("Init ethernet...");
 	server = new EthernetServer(arduino.ard.port);
 	init_ethernet ();
 	initialisation = millis ();
-	lcd.print ("Initialisation..");
-	lcd.print (Ethernet.localIP());
+	//lcd.print ("Initialisation..");
+	//lcd.print (Ethernet.localIP());
 	wiegand.reset ();
+        Serial.println ("Ethernet initialized.");
 	hid.bip (1);
 	while (millis() - initialisation <= 15000)
 	{
@@ -62,7 +64,9 @@ void setup()
 			wiegand.reset ();
 		}
 	}
-	lcd.clearPrint (arduino.ard.message);
+	//lcd.clearPrint (arduino.ard.message);
+
+        Serial.println ("Pret");
 }
 
 void init_ethernet ()
@@ -192,8 +196,11 @@ void proc_communication ()
 		byte checksum;
 		byte statut;
 		cmd = receive_cmd (client);
+                Serial.println ("Cmd received. "); 
 		data = receive_cmd_data (client, cmd[2]);
+                Serial.println("Data received.");
 		checksum = client.read ();
+                Serial.println("Checksum received.");
 		statut = check_checksum (cmd, data, checksum);
 		if (statut == 1)
 		{
@@ -201,10 +208,10 @@ void proc_communication ()
 			{
 				statut = BADDEVICE;
 			}
-			else if ((cmd[0] == RPLETH && cmd[1] > RESET) || (cmd[0] == HID && cmd[1] > BADGE) || (cmd[0] == LCD && cmd[1] > DISPLAYTIME))
+			/*else if ((cmd[0] == RPLETH && cmd[1] > RESET) || (cmd[0] == HID && cmd[1] > BADGE) || (cmd[0] == LCD && cmd[1] > DISPLAYTIME))
 			{
 				statut = ECHEC;
-			}
+			}*/
 			else
 			{
 				statut = SUCCES;
@@ -230,7 +237,7 @@ void proc_communication ()
 			}
 			else if (cmd [0] == LCD)
 			{
-				proc_cmd_lcd (cmd [1], data, cmd [2]);
+				//proc_cmd_lcd (cmd [1], data, cmd [2]);
 			}
 		}
 		else
@@ -259,6 +266,7 @@ void loop()
 	}
 	if (millis () - wiegandTimeout > 100 && wiegand.bitCount > 0 && wiegand.available () != 1)
 	{
+                Serial.println("Bitcount: " + wiegand.bitCount);
 		// check if it noise or trame
 		if (wiegand.bitCount > 10)
 			answer_badge ();
@@ -318,6 +326,7 @@ void answer (byte * com, byte statut)
 
 void answer_data (byte * com, byte statut, byte * data, byte size, EthernetClient client)
 {
+        Serial.println("Sending answer...");
 	byte checksum = 0;
 	client.write (statut);
 	checksum ^= statut;
@@ -358,6 +367,8 @@ void answer_data (byte * com, byte statut, byte * data, byte size)
 
 void answer_badge ()
 {
+        Serial.println ("Answering badge... "); 
+        
 	// wait for receive full trame
 	delay (100);
 	byte * cmd = (byte *)malloc (2 * sizeof (byte));
@@ -377,7 +388,7 @@ void answer_badge ()
 	free (cmd);
 }
 
-byte * receive_cmd (EthernetClient client)
+byte * receive_cmd (EthernetClient& client)
 {
 	byte * com = (byte *)malloc (3 * sizeof (byte));
 	for (int i = 0; i < 3; i++)
@@ -388,7 +399,7 @@ byte * receive_cmd (EthernetClient client)
 	return com;
 }
 
-byte * receive_cmd_data (EthernetClient client, byte size)
+byte * receive_cmd_data (EthernetClient& client, byte size)
 {
 	byte * cmd = NULL;
 	if (size != 0)

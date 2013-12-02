@@ -52,11 +52,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="wiegandReaderRelay.ino" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="wiegandReaderRelay.rc">
       <Filter>Fichiers de ressources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Wiegand.ino" />
   </ItemGroup>
 </Project>

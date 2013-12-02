@@ -22,6 +22,7 @@ void MyWiegand::reset()
 {
 	bitHolder = 0;
 	bitCount = 0;
+	wiegandTimeout = millis();
 }
 
 uint8_t MyWiegand::available ()
@@ -33,7 +34,7 @@ MyWiegand wiegand;
 
 void Data0()
 {
-        Serial.println ("0");
+        Serial.println ("Data0");
 	wiegandTimeout = millis ();
 	wiegand.bitCount ++;
 	wiegand.bitHolder = wiegand.bitHolder << 1;
@@ -41,7 +42,7 @@ void Data0()
 
 void Data1 ()
 {
-        Serial.println ("1");
+        Serial.println ("Data1");
 	wiegandTimeout = millis ();
 	wiegand.bitCount ++;
 	wiegand.bitHolder = wiegand.bitHolder << 1;

@@ -1,4 +1,4 @@
-  #include "MyArduino.h"
+#include "MyArduino.h"
 
 void MyArduino::init()
 {
@@ -34,7 +34,7 @@ uint8_t MyArduino::read ()
 	uint8_t result = 0;
 	if (sd.begin (4))
 	{
-		ifstream file("reader.cfg");
+		ifstream file("arduino.cfg");
 		if (file.is_open()) 
 		{
 			char *p = (char *)&ard;
