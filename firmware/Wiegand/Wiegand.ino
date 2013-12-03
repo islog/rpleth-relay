@@ -68,7 +68,7 @@ void init_ethernet ()
 	}
 }
 
-void proc_cmd_rpleth (byte * com, byte cmd, byte * data)
+void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size)
 {
 	switch (cmd)
 	{
@@ -81,32 +81,35 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data)
 				arduino.ard.dhcp = 0;
 			break;
 		case MAC:
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; size == 4 && i < 4; i++)
 			{
 				arduino.ard.mac [i] = data [i];
 			}
 			break;
 		case IP:
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; size == 6 && i < 6; i++)
 			{
 				arduino.ard.ip [i] = data [i];
 			}
 		case SUBNET:
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; size == 4 && i < 4; i++)
 			{
 				arduino.ard.subnet [i] = data [i];
 			}
 			break;
 		case GATEWAY:
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; size == 4 && i < 4; i++)
 			{
 				arduino.ard.gateway [i] = data [i];
 			}
 			break;
 		case PORT:
-			arduino.ard.port = data [0];
-			arduino.ard.port <<= 4;
-			arduino.ard.port = data [1];
+                        if (size == 2)
+                        {
+			  arduino.ard.port = data [0];
+			  arduino.ard.port <<= 4;
+			  arduino.ard.port = data [1];
+                        }
 			break;
 		case MESSAGE:
 			for (int i = 0; i < com[2] && i < 16; i++)
@@ -117,8 +120,8 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data)
 			lcd.clearPrint (arduino.ard.message);
 			break;
 		case RESET:
-			free (data);
-			free (com);
+			/*free (data);
+			free (com);*/
 			reset ();
 			break;
 	}
@@ -129,14 +132,17 @@ void proc_cmd_hid (byte cmd, byte * data, byte size)
   Serial.println ("proc_cmd_hid");
 	switch (cmd)
 	{
-		case BEEP:	
-			hid.bip (data[0]);
+		case BEEP:
+                        if (size == 1)
+			  hid.bip (data[0]);
 			break;
 		case GREENLED:
-			hid.setgreenled (data[0]);
+                        if (size == 1)
+			  hid.setgreenled (data[0]);
 			break;
 		case REDLED:
-			hid.setredled (data[0]);
+                        if (size == 1)
+			  hid.setredled (data[0]);
 			break;
 		case NOP:
 			break;
@@ -168,8 +174,9 @@ void proc_cmd_lcd (byte cmd, byte * data, byte size)
 			else
 				lcd.is_scroll = 0;
 			break;
-		case DISPLAYTIME: 
-			display_time = data[0];
+		case DISPLAYTIME:
+                        if (size == 1)
+			  display_time = data[0];
 			break;
 	}
 }
@@ -216,7 +223,7 @@ void proc_communication ()
 			}
 			if (cmd [0] == RPLETH)
 			{
-				proc_cmd_rpleth (cmd, cmd[1], data);
+				proc_cmd_rpleth (cmd, cmd[1], data, cmd[2]);
 		        }
 			else if (cmd [0] == HID)
 			{
