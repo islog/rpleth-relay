@@ -14,9 +14,9 @@ class MyHid
 
  public:
 	void init();
-	void bip (byte time);
-	void blink_led1 (byte time);
-	void blink_led2 (byte time);
+	void bip (byte status);
+	void setgreenled (byte status);
+	void setredled (byte status);
 
 };
 

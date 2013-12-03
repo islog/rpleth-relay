@@ -19,8 +19,8 @@
 
 // Hid Command
 #define BEEP 0x00
-#define BLINKLED1 0x01
-#define BLINKLED2 0x02
+#define GREENLED 0x01
+#define REDLED 0x02
 #define NOP 0x03
 #define BADGE 0x04
 

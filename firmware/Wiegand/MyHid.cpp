@@ -21,25 +21,32 @@ void MyHid::init_speaker ()
 	digitalWrite (speaker, HIGH);
 }
 
-void MyHid::bip (byte time)
+void MyHid::bip (byte status)
 {
-	digitalWrite (speaker, LOW);
-	delay (time * 100);
-	digitalWrite (speaker, HIGH);
+  if (status)
+    digitalWrite (speaker, LOW);
+  else
+    digitalWrite (speaker, HIGH);
 }
 
-void MyHid::blink_led1 (byte time)
+void MyHid::setgreenled (byte status)
 {
-	digitalWrite (led1, LOW);
-	delay (time * 1000);
-	digitalWrite (led1, HIGH);
+  Serial.println ("setgreenled");
+  Serial.println (status);
+  if (status)
+    digitalWrite (led1, LOW);
+  else
+    digitalWrite (led1, HIGH);
 }
 
-void MyHid::blink_led2 (byte time)
+void MyHid::setredled (byte status)
 {
-	digitalWrite (led1, LOW);
-	delay (time * 1000);
-	digitalWrite (led1, HIGH);
+  Serial.println ("setredled");
+  Serial.println (status);
+  if (status)
+    digitalWrite (led2, LOW);
+  else
+    digitalWrite (led2, HIGH);
 }
 
 MyHid hid;

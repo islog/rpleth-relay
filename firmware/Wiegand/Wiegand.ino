@@ -45,28 +45,15 @@ void setup()
 	//lcd.print (Ethernet.localIP());
 	wiegand.reset ();
         Serial.println ("Ethernet initialized.");
-	hid.bip (1);
-	while (millis() - initialisation <= 15000)
-	{
-		if (wiegand.available ())
-		{
-			delay (100);
-			if (tmp == wiegand.bitHolder && tmp != 0)
-			{
-				arduino.init ();
-				initialisation = millis() - 15001;
-				hid.bip (4);
-			}
-			else
-			{
-				tmp = wiegand.bitHolder;
-			}
-			wiegand.reset ();
-		}
-	}
-	//lcd.clearPrint (arduino.ard.message);
 
         Serial.println ("Pret");
+	hid.bip (1);
+        delay (100);
+        hid.bip (0);
+        delay (100);
+         hid.bip (1);
+        delay (100);
+        hid.bip (0);
 }
 
 void init_ethernet ()
@@ -139,16 +126,17 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data)
 
 void proc_cmd_hid (byte cmd, byte * data, byte size)
 {
+  Serial.println ("proc_cmd_hid");
 	switch (cmd)
 	{
 		case BEEP:	
 			hid.bip (data[0]);
 			break;
-		case BLINKLED1:
-			hid.blink_led1 (data[0]);
+		case GREENLED:
+			hid.setgreenled (data[0]);
 			break;
-		case BLINKLED2:
-			hid.blink_led2 (data[0]);
+		case REDLED:
+			hid.setredled (data[0]);
 			break;
 		case NOP:
 			break;
@@ -196,7 +184,7 @@ void proc_communication ()
 
 	if (arduino.client.haveCmd())
 	{
-                //Serial.println ("CMD IS HERE");
+                Serial.println ("CMD IS HERE");
                 byte* cmd = arduino.client.header;
                 byte *data = arduino.client.buffer;
 		if (arduino.client.check_checksum())
