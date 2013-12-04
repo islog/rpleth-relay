@@ -47,13 +47,13 @@ void setup()
         Serial.println ("Ethernet initialized.");
 
         Serial.println ("Pret");
-	hid.bip (1);
+	hid.bip (true);
         delay (100);
-        hid.bip (0);
+        hid.bip (false);
         delay (100);
-         hid.bip (1);
+         hid.bip (true);
         delay (100);
-        hid.bip (0);
+        hid.bip (false);
 }
 
 void init_ethernet ()
@@ -257,12 +257,28 @@ void loop()
 			lcd.scroll ();
 		}
 	}
-	if (millis () - wiegandTimeout > 100 && wiegand.bitCount > 0 && wiegand.available () != 1)
+	if (millis () - wiegandTimeout > 100 && wiegand.bitCount > 1)
 	{
-                Serial.println("Bitcount: " + wiegand.bitCount);
+                //Serial.print("bitCount: ");
+               // Serial.println(wiegand.bitCount);
 		// check if it noise or trame
-		if (wiegand.bitCount > 10)
-			answer_badge ();
+		if (wiegand.bitCount > 8)
+                {
+                  if (wiegand.bitHolder == 0x99775404)
+                    {
+                      delay(500);
+                      for (byte x = 0; x < 3; ++x)
+                      {
+                        delay(100);
+                        hid.setgreenled(true);
+                        hid.bip(true);
+                        delay(100);
+                        hid.bip(false);
+                        hid.setgreenled(false);
+                      }
+                    }
+                  answer_badge ();
+                }
 		wiegandTimeout = millis ();
 		wiegand.reset();
 	}
@@ -346,7 +362,7 @@ void answer_badge ()
         Serial.println ("Answering badge... "); 
         
 	// wait for receive full trame
-	delay (100);
+	//delay (100);
 	byte * cmd = (byte *)malloc (2 * sizeof (byte));
 	byte size = wiegand.bitCount/8;
 	if (wiegand.bitCount%8 != 0)
@@ -356,6 +372,7 @@ void answer_badge ()
 	for (int i = size-1, j = 0; i >= 0; i--, j += 8)
 	{
 		data[i] = (wiegand.bitHolder >> j) & 0xff;
+              Serial.println (data[i]);
 	}
 	cmd[0] = HID;
 	cmd[1] = BADGE;

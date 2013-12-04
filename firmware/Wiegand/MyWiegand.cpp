@@ -36,7 +36,6 @@ void Data0()
 	wiegandTimeout = millis ();
 	wiegand.bitCount ++;
 	wiegand.bitHolder = wiegand.bitHolder << 1;
-        Serial.println (wiegand.bitCount);
 }
 
 void Data1 ()
@@ -45,7 +44,6 @@ void Data1 ()
 	wiegand.bitCount ++;
 	wiegand.bitHolder = wiegand.bitHolder << 1;
 	wiegand.bitHolder |= 1;
-        Serial.println (wiegand.bitCount);
 }
 
 

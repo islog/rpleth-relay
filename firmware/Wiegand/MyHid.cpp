@@ -31,8 +31,6 @@ void MyHid::bip (byte status)
 
 void MyHid::setgreenled (byte status)
 {
-  Serial.println ("setgreenled");
-  Serial.println (status);
   if (status)
     digitalWrite (led1, LOW);
   else
@@ -41,8 +39,6 @@ void MyHid::setgreenled (byte status)
 
 void MyHid::setredled (byte status)
 {
-  Serial.println ("setredled");
-  Serial.println (status);
   if (status)
     digitalWrite (led2, LOW);
   else
