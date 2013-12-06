@@ -48,3 +48,5 @@ void Data1 ()
 
 
 uint32_t wiegandTimeout = 0;
+uint32_t pingNothification = 0;
+

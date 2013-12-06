@@ -24,7 +24,9 @@ class MyWiegand
 void Data0 ();
 void Data1 ();
 extern uint32_t wiegandTimeout;
+extern uint32_t pingNothification;
 
 extern MyWiegand wiegand;
 
 #endif
+

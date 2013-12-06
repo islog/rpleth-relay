@@ -4,17 +4,18 @@ void MyClientManager::read(EthernetClient client)
 {
   int data_size = client.available();
   int x = 0;
-  Serial.println ("ENTER READ");
-   Serial.println (data_size);
+  //Serial.println ("ENTER READ");
+   //Serial.println (data_size);
   if (headeroffset != 3 && data_size + headeroffset >= HEADER_SIZE)
   {
     while (headeroffset != HEADER_SIZE && x < data_size)
     {
-      Serial.println ("read header");
+     // Serial.println ("read header");
       header[headeroffset] = client.read();
+     // Serial.println (header[headeroffset]);
       ++headeroffset;
       ++x;
-      //Serial.println ((int)headeroffset);
+   //   Serial.println ((int)headeroffset);
     }
     
     if (headeroffset == 3 && header[2] + 1 > BUFFER_SIZE)
@@ -22,7 +23,7 @@ void MyClientManager::read(EthernetClient client)
   }
   else if (headeroffset == 3 && bufferoffset != header[2] && data_size + bufferoffset >= header[2])
   {
-    Serial.println ("DATA SIZE");
+   // Serial.println ("DATA SIZE");
     //Serial.println ((int)(header[2]));
     while (bufferoffset != header[2] && x < data_size)
     {
@@ -35,7 +36,7 @@ void MyClientManager::read(EthernetClient client)
   }
   else if (headeroffset == 3 && bufferoffset == header[2] && !checksumisset && data_size > 0)
   {
-    Serial.println ("CHECKSUM GET");
+    //Serial.println ("CHECKSUM GET");
     checksum = client.read();
     checksumisset = true;
   }
@@ -65,3 +66,4 @@ bool MyClientManager::check_checksum()
 	}
 	return false;
 }
+

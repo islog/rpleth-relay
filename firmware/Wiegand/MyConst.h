@@ -16,6 +16,7 @@
 #define PORT 0x07
 #define MESSAGE 0x08
 #define RESET 0x09
+#define PING 0x0A
 
 // Hid Command
 #define BEEP 0x00
@@ -40,4 +41,5 @@
 #define BADDEVICE 0x05
 
 #endif
+
 

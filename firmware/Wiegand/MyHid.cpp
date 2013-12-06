@@ -46,3 +46,4 @@ void MyHid::setredled (byte status)
 }
 
 MyHid hid;
+

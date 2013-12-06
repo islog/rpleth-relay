@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by arduinoReaderRelay.rc
 
-// Valeurs par défaut suivantes des nouveaux objets
+// Valeurs par dÃ©faut suivantes des nouveaux objets
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
@@ -12,3 +12,4 @@
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
+

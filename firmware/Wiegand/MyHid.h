@@ -23,3 +23,4 @@ class MyHid
 extern MyHid hid;
 
 #endif
+

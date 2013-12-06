@@ -46,7 +46,6 @@ void setup()
 	wiegand.reset ();
         Serial.println ("Ethernet initialized.");
 
-        Serial.println ("Pret");
 	hid.bip (true);
         delay (100);
         hid.bip (false);
@@ -68,7 +67,7 @@ void init_ethernet ()
 	}
 }
 
-void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size)
+void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClient client)
 {
 	switch (cmd)
 	{
@@ -129,7 +128,6 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size)
 
 void proc_cmd_hid (byte cmd, byte * data, byte size)
 {
-  Serial.println ("proc_cmd_hid");
 	switch (cmd)
 	{
 		case BEEP:
@@ -191,13 +189,12 @@ void proc_communication ()
 
 	if (arduino.client.haveCmd())
 	{
-                Serial.println ("CMD IS HERE");
+              //  Serial.println ("CMD IS HERE");
                 byte* cmd = arduino.client.header;
                 byte *data = arduino.client.buffer;
 		if (arduino.client.check_checksum())
 		{
-                        Serial.println ("CHECKSUM PASSED");
-  
+                       // Serial.println ("CHECKSUM PASSED");
                         byte statut = 0;
 			if (cmd[0] > LCD)
 			{
@@ -223,7 +220,7 @@ void proc_communication ()
 			}
 			if (cmd [0] == RPLETH)
 			{
-				proc_cmd_rpleth (cmd, cmd[1], data, cmd[2]);
+				proc_cmd_rpleth (cmd, cmd[1], data, cmd[2], client);
 		        }
 			else if (cmd [0] == HID)
 			{
@@ -280,6 +277,7 @@ void loop()
                   answer_badge ();
                 }
 		wiegandTimeout = millis ();
+               // pingNothification = millis ();
 		wiegand.reset();
 	}
 	proc_communication ();
@@ -318,7 +316,7 @@ void answer (byte * com, byte statut)
 
 void answer_data (byte * com, byte statut, byte * data, byte size, EthernetClient client)
 {
-        Serial.println("Sending answer...");
+       // Serial.println("Sending answer...");
 	byte checksum = 0;
 	client.write (statut);
 	checksum ^= statut;
@@ -339,7 +337,9 @@ void answer_data (byte * com, byte statut, byte * data, byte size, EthernetClien
 
 void answer_data (byte * com, byte statut, byte * data, byte size)
 {
+     // Serial.println("Sending answer 2...");
 	byte checksum = 0;
+
 	server->write (statut);
 	checksum ^= statut;
 	for (int i = 0; i < 2; i++)
@@ -347,6 +347,7 @@ void answer_data (byte * com, byte statut, byte * data, byte size)
 		server->write (com[i]);
 		checksum ^= com[i];
 	}
+
 	server->write (size);
 	checksum ^= size;
 	for (int i = 0; i < size; i++)
@@ -359,26 +360,25 @@ void answer_data (byte * com, byte statut, byte * data, byte size)
 
 void answer_badge ()
 {
-        Serial.println ("Answering badge... "); 
+        //Serial.println ("Answering badge... "); 
         
-	// wait for receive full trame
-	//delay (100);
-	byte * cmd = (byte *)malloc (2 * sizeof (byte));
+	byte cmd[2];
 	byte size = wiegand.bitCount/8;
 	if (wiegand.bitCount%8 != 0)
 		size ++;
 	byte * data = (byte *)malloc (size * sizeof (byte));
 	byte statut = SUCCES;
+
 	for (int i = size-1, j = 0; i >= 0; i--, j += 8)
 	{
+                Serial.print(data[i], 16);
 		data[i] = (wiegand.bitHolder >> j) & 0xff;
-              Serial.println (data[i]);
 	}
+
 	cmd[0] = HID;
 	cmd[1] = BADGE;
 	answer_data (cmd, statut, data, size);
 	free (data);
-	free (cmd);
 }
 
 byte * receive_cmd (EthernetClient& client)
@@ -418,3 +418,4 @@ void reset ()
 	wdt_enable(WDTO_15MS);
 	while(1);
 }
+
