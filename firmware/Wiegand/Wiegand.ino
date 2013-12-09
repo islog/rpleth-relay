@@ -214,7 +214,7 @@ void proc_communication ()
 				data[0] = arduino.ard.dhcp;
 				answer_data (cmd, SUCCES, data, 0x01, client);
 			}
-			else
+			else if (cmd[0] ==  RPLETH && cmd[1] == PING)
 			{
 				answer (cmd, statut, client);
 			}
