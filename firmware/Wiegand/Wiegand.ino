@@ -38,8 +38,8 @@ void setup()
 		arduino.init();
 	}
         Serial.println ("Init ethernet...");
-	server = new EthernetServer(arduino.ard.port);
 	init_ethernet ();
+        server = new EthernetServer(arduino.ard.port);
 	initialisation = millis ();
 	//lcd.print ("Initialisation..");
 	//lcd.print (Ethernet.localIP());
@@ -371,7 +371,6 @@ void answer_badge ()
 
 	for (int i = size-1, j = 0; i >= 0; i--, j += 8)
 	{
-                Serial.print(data[i], 16);
 		data[i] = (wiegand.bitHolder >> j) & 0xff;
 	}
 

@@ -33,6 +33,7 @@ MyWiegand wiegand;
 
 void Data0()
 {
+  //Serial.print(0);
 	wiegandTimeout = millis ();
 	wiegand.bitCount ++;
 	wiegand.bitHolder = wiegand.bitHolder << 1;
@@ -40,6 +41,7 @@ void Data0()
 
 void Data1 ()
 {
+  // Serial.print(1);
 	wiegandTimeout = millis ();
 	wiegand.bitCount ++;
 	wiegand.bitHolder = wiegand.bitHolder << 1;
