@@ -261,7 +261,8 @@ void loop()
 		// check if it noise or trame
 		if (wiegand.bitCount > 8)
                 {
-                  if (wiegand.bitHolder == 0x99775404)
+                  //if (wiegand.bitHolder == 0x99775404)
+                  if (wiegand.bitHolder == 0x2020585)
                     {
                       delay(500);
                       for (byte x = 0; x < 3; ++x)
