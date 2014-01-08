@@ -2,7 +2,6 @@
 #define _MYCONF_H
 
 #include "Arduino.h"
-#include "SdFat.h"
 #include "MyClient.h"
 
 typedef struct str_arduino
@@ -24,9 +23,9 @@ class MyArduino
 
  public:
 	void init();
-	uint8_t read ();
+	void readConfiguration ();
+        void writeConfiguration ();
 	Arduino ard;
-	SdFat sd;
         MyClientManager client;
 };
 
