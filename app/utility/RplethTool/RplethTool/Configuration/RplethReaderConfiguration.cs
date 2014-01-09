@@ -38,7 +38,7 @@ namespace RplethTool.Configuration
         /// Write the configuration on a file
         /// </summary>
         /// <returns>True if it succesfull or false otherwise</returns>
-        public override bool Write(Interface inter)
+        public override bool Work(Interface inter, Options option)
         {
             bool res = false;
             System.IO.Directory.CreateDirectory("./" + Name);
@@ -86,7 +86,7 @@ namespace RplethTool.Configuration
             {
                 inter.WriteMessage("\n*** Ethernet configuration ***\n");
                 if (options.Mac == null)
-                    struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
+                    struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16, false);
                 else
                 {
                     try
@@ -95,17 +95,17 @@ namespace RplethTool.Configuration
                     }
                     catch (Exception)
                     {
-                        struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16);
+                        struc.Mac = inter.GetByteTab("Enter the mac address of Rpleth", 6, ':', 16, false);
                     }
                 }
                 if (options.Dhcp == -1)
-                    struc.Dhcp = inter.GetByte("Disable the dhcp ?\nEnter 0 to disable or 1 to enable.");
+                    struc.Dhcp = inter.GetByte("Disable the dhcp ?\nEnter 0 to disable or 1 to enable.", false);
                 else
                     struc.Dhcp = Convert.ToByte(options.Dhcp);
                 if (struc.Dhcp == 0)
                 {
                     if (options.Ip == null)
-                        struc.Ip = inter.GetByteTab("Enter the ip address of Rpleth", 4, '.');
+                        struc.Ip = inter.GetByteTab("Enter the ip address of Rpleth", 4, '.', false);
                     else
                     {
                         try
@@ -114,24 +114,12 @@ namespace RplethTool.Configuration
                         }
                         catch (Exception)
                         {
-                            struc.Ip = inter.GetByteTab("Enter the ip address of Rpleth", 4, '.');
+                            struc.Ip = inter.GetByteTab("Enter the ip address of Rpleth", 4, '.', false);
                         }
                     }
-                    if (options.Dns == null)
-                        struc.Dns = inter.GetByteTab("Enter the dns address for Rpleth", 4, '.');
-                    else
-                    {
-                        try
-                        {
-                            struc.Dns = StringHelper.StringToByteTab(options.Dns, 4, '.');
-                        }
-                        catch (Exception)
-                        {
-                            struc.Ip = inter.GetByteTab("Enter the dns address for Rpleth", 4, '.');
-                        }
-                    }
+            
                     if (options.Subnet == null)
-                        struc.Subnet = inter.GetByteTab("Enter the subnet address for Rpleth", 4, '.');
+                        struc.Subnet = inter.GetByteTab("Enter the subnet address for Rpleth", 4, '.', false);
                     else
                     {
                         try
@@ -140,11 +128,11 @@ namespace RplethTool.Configuration
                         }
                         catch (Exception)
                         {
-                            struc.Subnet = inter.GetByteTab("Enter the subnet address for Rpleth", 4, '.');
+                            struc.Subnet = inter.GetByteTab("Enter the subnet address for Rpleth", 4, '.', false);
                         }
                     }
                     if (options.Gateway == null)
-                        struc.Gateway = inter.GetByteTab("Enter the gateway address for Rpleth", 4, '.');
+                        struc.Gateway = inter.GetByteTab("Enter the gateway address for Rpleth", 4, '.', false);
                     else
                     {
                         try
@@ -153,17 +141,17 @@ namespace RplethTool.Configuration
                         }
                         catch (Exception)
                         {
-                            struc.Gateway = inter.GetByteTab("Enter the gateway address for Rpleth", 4, '.');
+                            struc.Gateway = inter.GetByteTab("Enter the gateway address for Rpleth", 4, '.', false);
                         }
                     }
                 }
                 if (options.Port == -1)
-                    struc.Port = Convert.ToUInt16(inter.GetUint("Enter the port number that listen Rpleth"));
+                    struc.Port = Convert.ToUInt16(inter.GetUint("Enter the port number that listen Rpleth", false));
                 else
                     struc.Port = Convert.ToUInt16(options.Port);
                 inter.WriteMessage("\n*** Rpleth configuration ***\n");
                 if (options.Welcome == null)
-                    struc.Message = inter.GetMessage("Enter the welcome message of Rpleth");
+                    struc.Message = inter.GetMessage("Enter the welcome message of Rpleth", false);
                 else
                     struc.Message = options.Welcome;
             }

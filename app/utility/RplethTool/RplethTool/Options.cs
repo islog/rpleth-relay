@@ -20,46 +20,22 @@ namespace RplethTool
         public int Menu { get; set; }
 
         /// <summary>
-        /// The begin number of wiegand com.
+        /// The ip adress of the Arduino Target.
         /// </summary>
-        [Option('b', "begin", DefaultValue = -1, HelpText = "The begin number of wiegand com.")]
-        public int Begin { get; set; }
+        [Option('a', "target-ip", DefaultValue = null, HelpText = "The ip adress of the Arduino Target.")]
+        public string TargetIp { get; set; }
 
         /// <summary>
-        /// The cancel number of wiegand com.
+        /// The port of the Arduino Target.
         /// </summary>
-        [Option('c', "cancel", DefaultValue = -1, HelpText = "The cancel number of wiegand com.")]
-        public int Cancel { get; set; }
-        
-        /// <summary>
-        /// The offset in number of wiegand com.
-        /// </summary>
-        [Option('o', "offset", DefaultValue = -1, HelpText = "The offset in number of wiegand com.")]
-        public int Offset { get; set; }
-
-        /// <summary>
-        /// The lenght of number in wiegand com.
-        /// </summary>
-        [Option('l', "lenght", DefaultValue = -1, HelpText = "The lenght of number in wiegand com.")]
-        public int Lenght { get; set; }
-
-        /// <summary>
-        /// The size of trame in wiegand com.
-        /// </summary>
-        [Option('t', "tramsize", DefaultValue = -1, HelpText = "The size of trame in wiegand com.")]
-        public int TramSize { get; set; }
+        [Option('e', "target-port", DefaultValue = -1, HelpText = "The port of the Arduino Target.")]
+        public int TargetPort { get; set; }
 
         /// <summary>
         /// The ip adress of Arduino.
         /// </summary>
         [Option('i', "ip", DefaultValue = null, HelpText = "The ip adress of Arduino.")]
         public string Ip { get; set; }
-
-        /// <summary>
-        /// The dns adress of Arduino.
-        /// </summary>
-        [Option('d', "dns", DefaultValue = null, HelpText = "The dns adress of Arduino.")]
-        public string Dns { get; set; }
 
         /// <summary>
         /// The subnet mask of Arduino.
@@ -94,20 +70,14 @@ namespace RplethTool
         /// <summary>
         /// Stat of dhcp. (0 to disable or anything else to enable)
         /// </summary>
-        [Option('x', "dhcp", DefaultValue = -1, HelpText = "Stat of dhcp. (0 to disable or anything else to enable)")]
+        [Option('d', "dhcp", DefaultValue = -1, HelpText = "Stat of dhcp. (0 to disable or 1 to enable)")]
         public int Dhcp { get; set; }
 
         /// <summary>
-        /// User of arduino in ftp server.
+        /// Stat of dhcp. (0 to disable or anything else to enable)
         /// </summary>
-        [Option('u', "user", DefaultValue = null, HelpText = "User of arduino in ftp server.")]
-        public string User { get; set; }
-
-        /// <summary>
-        /// Password of arduino in ftp server.
-        /// </summary>
-        [Option('f', "pass", DefaultValue = null, HelpText = "Password of arduino in ftp server.")]
-        public string Pass { get; set; }
+        [Option('r', "reboot", DefaultValue = -1, HelpText = "Reboot the arduino after the configuration")]
+        public int reboot { get; set; }
 
         /// <summary>
         /// Display the help message.
@@ -124,7 +94,7 @@ namespace RplethTool
         /// Parse the args in options.
         /// </summary>
         /// <param name="args">Args get in command line</param>
-        public void Parse (string[] args)
+        public void Parse(string[] args)
         {
             if (!CommandLine.Parser.Default.ParseArguments(args, this))
             {

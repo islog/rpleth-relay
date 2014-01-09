@@ -25,16 +25,14 @@ namespace RplethTool
                     {
                         inter.WriteMessage("You made a mistake start again.");
                     }
-                    inter.confList.ConfigurationsList[options.Menu].Write(inter);
+                    inter.confList.ConfigurationsList[options.Menu].Work(inter, options);
                 }
-                inter.GoodBy();
-                Thread.Sleep(5000);
+                inter.GoodBye();
             }
             catch (Exception e)
             {
                 inter.WriteError(e.Message);
-                inter.GoodBy();
-                Thread.Sleep(5000);
+                inter.GoodBye();
             }
         }
     }

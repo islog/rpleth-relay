@@ -61,6 +61,10 @@
     <Reference Include="CommandLine">
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net40\CommandLine.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.LibLogicalAccess.Com">
+      <HintPath>..\packages\liblogicalaccess.com.1.74.0107\lib\Interop.LibLogicalAccess.Com.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -72,9 +76,8 @@
   <ItemGroup>
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\ConfigurationList.cs" />
-    <Compile Include="Configuration\RplethAcEventConfiguration.cs" />
     <Compile Include="Configuration\RplethReaderConfiguration.cs" />
-    <Compile Include="Configuration\RplethToUrlConfiguration.cs" />
+    <Compile Include="Configuration\RplethReaderConfigurationEthernet.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />

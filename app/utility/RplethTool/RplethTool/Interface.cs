@@ -34,9 +34,9 @@ namespace RplethTool
         }
 
         /// <summary>
-        /// Display a GoodBy message.
+        /// Display a GoodBye message.
         /// </summary>
-        public void GoodBy()
+        public void GoodBye()
         {
             Console.WriteLine("\t\t\t***********************");
             Console.WriteLine("\t\t\tThanks to use our Tool.");
@@ -57,9 +57,9 @@ namespace RplethTool
             {
                 tmp = "\t";
                 tmp += i;
-                tmp += " to create a ";
+                tmp += " to ";
                 tmp += confList.ConfigurationsList[i].ToString();
-                tmp += " file.";
+                tmp += ".";
                 Console.WriteLine(tmp);
             }
             tmp = "\t";
@@ -99,10 +99,11 @@ namespace RplethTool
                 if (message != string.Empty)
                     Console.WriteLine(message);
                 else
-                    Console.WriteLine("Enter a number");
+                    Console.WriteLine("Enter a number or ENTER to pass");
                 Console.Write("\t");
                 tmp = Console.ReadLine();
-                res = Convert.ToInt32(tmp, numberBase);
+                if (tmp != String.Empty)
+                    res = Convert.ToInt32(tmp, numberBase);
             }
             catch (Exception e)
             {
@@ -126,20 +127,21 @@ namespace RplethTool
         /// </summary>
         /// <param name="message">The message to display</param>
         /// <param name="numberBase">The base of the number writing by the user</param>
+        /// <param name="optional">The argument is optional</param>
         /// <returns>The unsigned integer ask to the user</returns>
-        public uint GetUint(string message, int numberBase)
+        public uint GetUint(string message, int numberBase, bool optional)
         {
             UInt32 res = 0;
             try
             {
-                string tmp;
-                if (message != string.Empty)
-                    Console.WriteLine(message);
-                else
-                    Console.WriteLine("Enter a number");
+                string tmp, opt = "";
+                if (optional)
+                    opt = " or ENTER to pass";
+                Console.WriteLine(message + opt);
                 Console.Write("\t");
                 tmp = Console.ReadLine();
-                res = Convert.ToUInt32(tmp, numberBase);
+                if (tmp != String.Empty)
+                    res = Convert.ToUInt32(tmp, numberBase);
             }
             catch (Exception e)
             {
@@ -152,10 +154,11 @@ namespace RplethTool
         /// Display the message and ask a unsigned integer to the user. Use base 10.
         /// </summary>
         /// <param name="message">The message to display</param>
+        /// <param name="optional">The argument is optional</param>
         /// <returns>The unsigned integer ask to the user</returns>
-        public uint GetUint(string message)
+        public uint GetUint(string message, bool optional)
         {
-            return GetUint(message, 10);
+            return GetUint(message, 10, optional);
         }
 
         /// <summary>
@@ -173,10 +176,11 @@ namespace RplethTool
                 if (message != string.Empty)
                     Console.WriteLine(message);
                 else
-                    Console.WriteLine("Enter a number");
+                    Console.WriteLine("Enter a number or ENTER to pass");
                 Console.Write("\t");
                 tmp = Console.ReadLine();
-                res = Convert.ToInt64(tmp, numberBase);
+                if (tmp != String.Empty)
+                    res = Convert.ToInt64(tmp, numberBase);
             }
             catch (Exception e)
             {
@@ -202,16 +206,19 @@ namespace RplethTool
         /// <param name="size">The size of the tab</param>
         /// <param name="separator">The separor to use to split the string receive</param>
         /// <param name="numberBase">The base of the number writing by the user</param>
+        /// <param name="optional">The argument is optional</param>
+        /// <param name="tmp">The result of the command as string</param>
         /// <returns>The tab ask to the user</returns>
-        public byte[] GetByteTab (string message, int size, char separator, int numberBase)
+        public byte[] GetByteTab(string message, int size, char separator, int numberBase, bool optional, ref string tmp)
         {
             byte[] result = null;
             if (size > 0 && (numberBase == 2 || numberBase == 10 || numberBase == 16))
             {
-                result = new byte[size];
+                result = null;
                 try
                 {
-                    string tmp = null, format = "(Format: ";
+                    tmp = null;
+                    string format = "(Format: ";
                     for (int i = 0; i < size; i++)
                     {
                         if (numberBase == 10)
@@ -228,10 +235,15 @@ namespace RplethTool
                         Console.WriteLine(message);
                     else
                         Console.WriteLine("Enter an address");
-                    Console.WriteLine(format);
+                    string opt = "";
+                    if (optional)
+                        opt = " or ENTER to pass";
+                    Console.WriteLine(format + opt);
+
                     Console.Write("\t");
                     tmp = Console.ReadLine();
-                    result = StringHelper.StringToByteTab(tmp, size, separator, numberBase);
+                    if (tmp != String.Empty || !optional)
+                        result = StringHelper.StringToByteTab(tmp, size, separator, numberBase);
                 }
                 catch (Exception e)
                 {
@@ -247,29 +259,60 @@ namespace RplethTool
         /// <param name="message">The message to display</param>
         /// <param name="size">The size of the tab</param>
         /// <param name="separator">The separor to use to split the string receive</param>
+        /// <param name="optional">The argument is optional</param>
+        /// <param name="result">The result of the command as string</param>
         /// <returns>The tab ask to the user</returns>
-        public byte[] GetByteTab(string message, int size, char separator)
+        public byte[] GetByteTab(string message, int size, char separator, bool optional, ref string result)
         {
-            return GetByteTab(message, size, separator, 10);
+            return GetByteTab(message, size, separator, 10, optional, ref result);
+        }
+
+        /// <summary>
+        /// Display the message and ask a tab to the user. Use base 10.
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        /// <param name="size">The size of the tab</param>
+        /// <param name="separator">The separor to use to split the string receive</param>
+        /// <param name="optional">The argument is optional</param>
+        /// <returns>The tab ask to the user</returns>
+        public byte[] GetByteTab(string message, int size, char separator, bool optional)
+        {
+            return GetByteTab(message, size, separator, 10, optional);
+        }
+
+        /// <summary>
+        /// Display the message and ask a tab to the user. Use base 10.
+        /// </summary>
+        /// <param name="message">The message to display</param>
+        /// <param name="size">The size of the tab</param>
+        /// <param name="separator">The separor to use to split the string receive</param>
+        /// <param name="numberBase">The base of the number writing by the user</param>
+        /// <param name="optional">The argument is optional</param>
+        /// <returns>The tab ask to the user</returns>
+        public byte[] GetByteTab(string message, int size, char separator, int numberBase, bool optional)
+        {
+            string tmp = null;
+            return GetByteTab(message, size, separator, 10, optional, ref tmp);
         }
 
         /// <summary>
         /// Display the message and ask string to the user.
         /// </summary>
         /// <param name="message">The message to display</param>
+        /// <param name="optional">The argument is optional</param>
         /// <returns>The string ask to the user</returns>
-        public string GetMessage(string message)
+        public string GetMessage(string message, bool optional)
         {
             string res;
             try
             {
-                if (message != string.Empty)
-                    Console.WriteLine(message);
-                else
-                    Console.WriteLine("Enter a message");
+                string opt = "";
+                if (optional)
+                    opt = " or ENTER to pass";
+                Console.WriteLine(message + opt);
                 Console.Write("\t");
                 res = Console.ReadLine();
-                if (res == string.Empty)
+                if (res != string.Empty || !optional)
                     throw new Exception("Error : Bad string receive");
             }
             catch (Exception e)
@@ -284,20 +327,22 @@ namespace RplethTool
         /// </summary>
         /// <param name="message">The message to display</param>
         /// <param name="numberBase">The base of the number writing by the user</param>
+        /// <param name="optional">The argument is optional</param>
         /// <returns>The byte ask to the user</returns>
-        public byte GetByte(string message, int numberBase)
+        public byte GetByte(string message, int numberBase, bool optional)
         {
             byte res = 0;
             try
             {
                 string tmp;
-                if (message != string.Empty)
-                    Console.WriteLine(message);
-                else
-                    Console.WriteLine("Enter a number");
+                string opt = "";
+                if (optional)
+                    opt = " or ENTER to pass";
+                Console.WriteLine(message + opt);
                 Console.Write("\t");
                 tmp = Console.ReadLine();
-                res = Convert.ToByte(tmp, numberBase);
+                if (tmp != String.Empty || !optional)
+                    res = Convert.ToByte(tmp, numberBase);
             }
             catch (Exception e)
             {
@@ -310,10 +355,11 @@ namespace RplethTool
         /// Display the message and ask a byte to the user. Use base 10.
         /// </summary>
         /// <param name="message">The message to display</param>
+        /// <param name="optional">The argument is optional</param>
         /// <returns>The byte ask to the user</returns>
-        public byte GetByte(string message)
+        public byte GetByte(string message, bool optional)
         {
-            return GetByte(message, 10);
+            return GetByte(message, 10, optional);
         }
 
         /// <summary>

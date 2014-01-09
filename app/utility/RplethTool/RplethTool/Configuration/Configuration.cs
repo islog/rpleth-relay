@@ -35,10 +35,10 @@ namespace RplethTool.Configuration
         }
 
         /// <summary>
-        /// Write the configuration on a file
+        /// Send the command to Rpleth
         /// </summary>
         /// <returns>True if it succesfull or false otherwise</returns>
-        public abstract bool Write(Interface inter);
+        public abstract bool Work(Interface inter, Options options);
 
         /// <summary>
         /// Get the configuration from interface
