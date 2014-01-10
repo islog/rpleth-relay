@@ -314,7 +314,7 @@ void loop()
     // check if it noise or trame
     if (wiegand.bitCount > 8)
     {
-      if (wiegand.bitHolder == 0x2020585)
+      if (wiegand.bitHolder == 0x2020585) //Facility Code 1 - Uid 706
       {
         delay(500);
         for (byte x = 0; x < 3; ++x)
@@ -327,7 +327,7 @@ void loop()
           hid.setgreenled(false);
         }
       }
-      else if (wiegand.bitHolder == 0x000000000)
+      else if (wiegand.bitHolder == 0x2020177) //Facility Code 1 - Uid 108
       {
         EEPROM.write(0, 0xff);
         reset();
