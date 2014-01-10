@@ -62,7 +62,7 @@
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net40\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="Interop.LibLogicalAccess.Com">
-      <HintPath>..\packages\liblogicalaccess.com.1.74.0107\lib\Interop.LibLogicalAccess.Com.dll</HintPath>
+      <HintPath>..\packages\liblogicalaccess.com.1.74.0110\lib\Interop.LibLogicalAccess.Com.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
