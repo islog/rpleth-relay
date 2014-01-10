@@ -52,11 +52,12 @@ void init_ethernet ()
 {
   if (arduino.ard.dhcp == 1)
   {
+    Serial.println("DHCP");
     Ethernet.begin(arduino.ard.mac);
   }
   else
   {
-/*    Serial.print("IP: ");
+    Serial.print("IP: ");
     Serial.print(arduino.ard.ip[0]);
     Serial.print(".");
     Serial.print(arduino.ard.ip[1]);
@@ -64,8 +65,8 @@ void init_ethernet ()
     Serial.print(arduino.ard.ip[2]);
     Serial.print(".");
     Serial.println(arduino.ard.ip[3]);
-    
-         Serial.print("Gateway: ");
+
+    Serial.print("Gateway: ");
     Serial.print(arduino.ard.gateway[0]);
     Serial.print(".");
     Serial.print(arduino.ard.gateway[1]);
@@ -73,8 +74,8 @@ void init_ethernet ()
     Serial.print(arduino.ard.gateway[2]);
     Serial.print(".");
     Serial.println(arduino.ard.gateway[3]);
-    
-             Serial.print("subnet: ");
+
+    Serial.print("subnet: ");
     Serial.print(arduino.ard.subnet[0]);
     Serial.print(".");
     Serial.print(arduino.ard.subnet[1]);
@@ -82,8 +83,8 @@ void init_ethernet ()
     Serial.print(arduino.ard.subnet[2]);
     Serial.print(".");
     Serial.println(arduino.ard.subnet[3]);
-        
-             Serial.print("mac: ");
+
+    Serial.print("mac: ");
     Serial.print(arduino.ard.mac[0], 16);
     Serial.print(":");
     Serial.print(arduino.ard.mac[1], 16);
@@ -91,14 +92,14 @@ void init_ethernet ()
     Serial.print(arduino.ard.mac[2], 16);
     Serial.print(":");
     Serial.print(arduino.ard.mac[3], 16);
-        Serial.print(":");
+    Serial.print(":");
     Serial.print(arduino.ard.mac[4], 16);
-        Serial.print(":");
+    Serial.print(":");
     Serial.println(arduino.ard.mac[5], 16);
-    
-                 Serial.print("port: ");
-    Serial.println(arduino.ard.port);*/
-    
+
+    Serial.print("port: ");
+    Serial.println(arduino.ard.port);
+
     Ethernet.begin (arduino.ard.mac, arduino.ard.ip, arduino.ard.dns, arduino.ard.gateway, arduino.ard.subnet);
   }
 }
@@ -109,12 +110,12 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
   {
   case STATEDHCP:
     break;
-    
+
   case DHCP:
     if (size == 1)
       arduino.ard.dhcp = data [0];
     break;
-    
+
   case MAC:
     if (size == 6)
     {
@@ -124,7 +125,7 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
       }
     }
     break;
-    
+
   case IP:
     if (size == 4)
     {
@@ -134,7 +135,7 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
       }
     }
     break;
-    
+
   case SUBNET:
     if (size == 4)
     {
@@ -144,7 +145,7 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
       }
     }
     break;
-    
+
   case GATEWAY:
     if (size == 4)
     {
@@ -154,18 +155,16 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
       }
     }
     break;
-    
+
   case PORT:
     if (size == 2)
     {
-      Serial.println (data [0], 16);
       arduino.ard.port = data [0];
       arduino.ard.port <<= 8;
-      Serial.println (data [1], 16);
       arduino.ard.port += data [1];
     }
     break;
-    
+
   case MESSAGE:
     for (int i = 0; i < size && i < 16; i++)
     {
@@ -174,7 +173,7 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
     arduino.ard.message[min (size, 31)] = '\0';
     lcd.clearPrint (arduino.ard.message);
     break;
-    
+
   case RESET:
     reset ();
     break;
@@ -245,12 +244,10 @@ void proc_communication ()
 
   if (arduino.client.haveCmd())
   {
-    //  Serial.println ("CMD IS HERE");
     byte* cmd = arduino.client.header;
     byte *data = arduino.client.buffer;
     if (arduino.client.check_checksum())
     {
-      // Serial.println ("CHECKSUM PASSED");
       byte statut = 0;
       if (cmd[0] > LCD)
       {
@@ -317,7 +314,6 @@ void loop()
     // check if it noise or trame
     if (wiegand.bitCount > 8)
     {
-      //if (wiegand.bitHolder == 0x99775404)
       if (wiegand.bitHolder == 0x2020585)
       {
         delay(500);
@@ -331,10 +327,14 @@ void loop()
           hid.setgreenled(false);
         }
       }
+      else if (wiegand.bitHolder == 0x000000000)
+      {
+        EEPROM.write(0, 0xff);
+        reset();
+      }
       answer_badge ();
     }
     wiegandTimeout = millis ();
-    // pingNothification = millis ();
     wiegand.reset();
   }
   proc_communication ();
@@ -474,6 +474,8 @@ void reset ()
   wdt_enable(WDTO_15MS);
   while(1);
 }
+
+
 
 
 

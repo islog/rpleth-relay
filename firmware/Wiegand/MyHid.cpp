@@ -2,23 +2,23 @@
 
 void MyHid::init()
 {
-	speaker = 7;
-	led1 = 8;
-	led2 = 11;
-	init_led ();
-	init_speaker ();
+  speaker = 7;
+  led1 = 8;
+  led2 = 11;
+  init_led ();
+  init_speaker ();
 }
 
 void MyHid::init_led ()
 {
-	pinMode(led1,OUTPUT);
-	digitalWrite (led1, HIGH);
+  pinMode(led1,OUTPUT);
+  digitalWrite (led1, HIGH);
 }
 
 void MyHid::init_speaker ()
 {
-	pinMode(speaker,OUTPUT);
-	digitalWrite (speaker, HIGH);
+  pinMode(speaker,OUTPUT);
+  digitalWrite (speaker, HIGH);
 }
 
 void MyHid::bip (byte status)
@@ -46,4 +46,5 @@ void MyHid::setredled (byte status)
 }
 
 MyHid hid;
+
 

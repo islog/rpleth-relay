@@ -292,7 +292,7 @@ namespace RplethTool
         public byte[] GetByteTab(string message, int size, char separator, int numberBase, bool optional)
         {
             string tmp = null;
-            return GetByteTab(message, size, separator, 10, optional, ref tmp);
+            return GetByteTab(message, size, separator, numberBase, optional, ref tmp);
         }
 
         /// <summary>

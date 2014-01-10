@@ -11,14 +11,14 @@
 
 class MyWiegand
 {
-	private:
+private:
 
-	public:
-		uint64_t bitHolder;
-		uint8_t bitCount;
-		void init();
-		void reset ();
-		uint8_t available ();
+public:
+  uint64_t bitHolder;
+  uint8_t bitCount;
+  void init();
+  void reset ();
+  uint8_t available ();
 };
 
 void Data0 ();
@@ -29,4 +29,5 @@ extern uint32_t pingNothification;
 extern MyWiegand wiegand;
 
 #endif
+
 

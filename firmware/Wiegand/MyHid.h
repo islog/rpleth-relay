@@ -5,22 +5,23 @@
 
 class MyHid
 {
- private:
-	byte speaker;
-	byte led1;
-	byte led2;
-	void init_led ();
-	void init_speaker ();
+private:
+  byte speaker;
+  byte led1;
+  byte led2;
+  void init_led ();
+  void init_speaker ();
 
- public:
-	void init();
-	void bip (byte status);
-	void setgreenled (byte status);
-	void setredled (byte status);
+public:
+  void init();
+  void bip (byte status);
+  void setgreenled (byte status);
+  void setredled (byte status);
 
 };
 
 extern MyHid hid;
 
 #endif
+
 

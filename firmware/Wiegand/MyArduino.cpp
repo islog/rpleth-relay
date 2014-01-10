@@ -3,10 +3,10 @@
 
 void MyArduino::init()
 {
-  /*Serial.println ("RESET EEPROM");
-    for (size_t i = 0; i < sizeof(Arduino); i++)
-    EEPROM.write(i, 0xff);*/
-    
+  /*  Serial.println ("RESET EEPROM");
+   for (size_t i = 0; i < sizeof(Arduino); i++)
+   EEPROM.write(i, 0xff);*/
+
   if (EEPROM.read(0) == 0xff)
   {
     ard.mac [0] = 0x90;
@@ -33,7 +33,7 @@ void MyArduino::init()
     ard.gateway [3] = 254;
     ard.port = 2000;
     ard.dhcp = 0;
-    
+
     writeConfiguration();
   }
   else
@@ -58,5 +58,6 @@ void MyArduino::writeConfiguration ()
 }
 
 MyArduino arduino;
+
 
 
