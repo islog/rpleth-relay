@@ -331,7 +331,7 @@ namespace RplethTool
         /// <returns>The byte ask to the user</returns>
         public byte GetByte(string message, int numberBase, bool optional)
         {
-            byte res = 0;
+            byte res = 3;
             try
             {
                 string tmp;

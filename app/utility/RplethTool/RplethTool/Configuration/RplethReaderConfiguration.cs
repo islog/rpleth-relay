@@ -21,7 +21,7 @@ namespace RplethTool.Configuration
         public RplethReaderConfiguration() 
             : base()
         {
-            Name = "RplethReaderConfiguration";
+            Name = "Create Configuration File";
         }
 
         /// <summary>
