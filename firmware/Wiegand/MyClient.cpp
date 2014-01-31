@@ -40,7 +40,7 @@ bool MyClientManager::haveCmd()
 
 bool MyClientManager::check_checksum()
 {
-  byte result = 0, tmp = 0;
+  byte tmp = 0;
   for (int i = 0; i < 3; i++)
   {
     tmp ^= header[i];

@@ -327,7 +327,7 @@ void loop()
           hid.setgreenled(false);
         }
       }
-      else if (wiegand.bitHolder == 0x2020177) //Facility Code 1 - Uid 108
+      else if (wiegand.bitHolder == 0x2020177) //Facility Code 1 - Uid 187
       {
         EEPROM.write(0, 0xff);
         reset();

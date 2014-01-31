@@ -3,7 +3,7 @@
 
 void MyArduino::init()
 {
-  /*  Serial.println ("RESET EEPROM");
+/*    Serial.println ("RESET EEPROM");
    for (size_t i = 0; i < sizeof(Arduino); i++)
    EEPROM.write(i, 0xff);*/
 
