@@ -31,7 +31,7 @@ void MyArduino::init()
     ard.gateway [1] = 2;
     ard.gateway [2] = 255;
     ard.gateway [3] = 254;
-    ard.port = 2000;
+    ard.port = 9559;
     ard.dhcp = 0;
 
     writeConfiguration();

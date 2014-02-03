@@ -108,9 +108,6 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
 {
   switch (cmd)
   {
-  case STATEDHCP:
-    break;
-
   case DHCP:
     if (size == 1)
       arduino.ard.dhcp = data [0];
@@ -177,7 +174,15 @@ void proc_cmd_rpleth (byte * com, byte cmd, byte * data, byte size, EthernetClie
   case RESET:
     reset ();
     break;
+  case STATEDHCP:            
+    data = (byte *)malloc (sizeof (byte));
+    data[0] = arduino.ard.dhcp;
+    answer_data (com, SUCCES, data, 0x01, client);
+    return;
+  case PING:
+    break;
   }
+  answer (com, SUCCES, client);
   arduino.writeConfiguration();
 }
 
@@ -248,29 +253,6 @@ void proc_communication ()
     byte *data = arduino.client.buffer;
     if (arduino.client.check_checksum())
     {
-      byte statut = 0;
-      if (cmd[0] > LCD)
-      {
-        statut = BADDEVICE;
-      }
-      //else if ((cmd[0] == RPLETH && cmd[1] > RESET) || (cmd[0] == HID && cmd[1] > BADGE) || (cmd[0] == LCD && cmd[1] > DISPLAYTIME))
-      //{
-      //	statut = ECHEC;
-      //}
-      else
-      {
-        statut = SUCCES;
-      }
-      if (cmd[0] == RPLETH && cmd[1] == STATEDHCP)
-      {                          
-        data = (byte *)malloc (sizeof (byte));
-        data[0] = arduino.ard.dhcp;
-        answer_data (cmd, SUCCES, data, 0x01, client);
-      }
-      else if (cmd[0] ==  RPLETH && cmd[1] == PING)
-      {
-        answer (cmd, statut, client);
-      }
       if (cmd [0] == RPLETH)
       {
         proc_cmd_rpleth (cmd, cmd[1], data, cmd[2], client);
@@ -283,6 +265,8 @@ void proc_communication ()
       {
         //proc_cmd_lcd (cmd [1], data, cmd [2]);
       }
+      else
+        answer (cmd, BADDEVICE, client);
     }
     else
     {
@@ -390,6 +374,8 @@ void answer_data (byte * com, byte statut, byte * data, byte size, EthernetClien
     checksum ^= data[i];
   }
   client.write (checksum);
+  
+  Serial.println("CMD Send.");
 }
 
 void answer_data (byte * com, byte statut, byte * data, byte size)
@@ -474,6 +460,7 @@ void reset ()
   wdt_enable(WDTO_15MS);
   while(1);
 }
+
 
 
 
